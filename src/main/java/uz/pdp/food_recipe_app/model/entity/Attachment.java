@@ -2,12 +2,14 @@ package uz.pdp.food_recipe_app.model.entity;
 
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import uz.pdp.food_recipe_app.model.base.BaseEntity;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Attachment extends BaseEntity {

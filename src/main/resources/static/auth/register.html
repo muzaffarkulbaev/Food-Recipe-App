@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chef's Portal | Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/register.css">
+
+</head>
+<body>
+<!-- Background bubbles -->
+<div class="bubbles" id="bubbles"></div>
+
+<!-- Main container -->
+<div class="container pulse">
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-utensils"></i>Chef's Portal
+        </div>
+        <h1 class="welcome-text">Hello,<br>Welcome Back!</h1>
+        <p class="sub-text">Sign in to continue your culinary journey</p>
+    </div>
+
+    <div class="form-container">
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="Enter Email">
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Enter Password">
+        </div>
+
+        <div class="forgot-password">
+            <a href="#">Forgot Password?</a>
+        </div>
+
+        <button class="btn sign-in-btn" onclick="login()">
+            Sign In <i class="fas fa-arrow-right"></i>
+        </button>
+
+        <div class="divider">
+            <span>or</span>
+        </div>
+
+        <button class="btn start-cooking-btn" onclick="startCooking()">
+            Start Cooking <i class="fas fa-utensils"></i>
+        </button>
+
+        <div class="social-login">
+            <div class="social-btn fb">
+                <i class="fab fa-facebook-f"></i>
+            </div>
+            <div class="social-btn google">
+                <i class="fab fa-google"></i>
+            </div>
+            <div class="social-btn twitter">
+                <i class="fab fa-twitter"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Don't have an account? <a href="#">Register Now</a></p>
+    </div>
+
+    <i class="fas fa-utensils cooking-icon"></i>
+</div>
+
+<script>
+    // Create background bubbles
+    function createBubbles() {
+        const bubblesContainer = document.getElementById('bubbles');
+        const colors = ['rgba(255, 255, 255, 0.2)', 'rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.1)'];
+
+        for (let i = 0; i < 20; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+
+            // Random properties
+            const size = Math.random() * 100 + 20;
+            const posX = Math.random() * 100;
+            const duration = Math.random() * 20 + 10;
+            const delay = Math.random() * 5;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${posX}%`;
+            bubble.style.background = color;
+            bubble.style.animationDuration = `${duration}s`;
+            bubble.style.animationDelay = `${delay}s`;
+
+            bubblesContainer.appendChild(bubble);
+        }
+    }
+
+    function login() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (!email || !password) {
+            showMessage('Please fill in all fields', 'error');
+            return;
+        }
+
+        // Simulate loading
+        const btn = document.querySelector('.sign-in-btn');
+        btn.innerHTML = 'Signing In <i class="fas fa-spinner fa-spin"></i>';
+        btn.disabled = true;
+
+        // Simulate API call
+        setTimeout(() => {
+            showMessage('Login successful! Redirecting to dashboard...', 'success');
+
+            // Reset button after delay
+            setTimeout(() => {
+                btn.innerHTML = 'Sign In <i class="fas fa-arrow-right"></i>';
+                btn.disabled = false;
+            }, 2000);
+        }, 1500);
+    }
+
+    function startCooking() {
+        // Simulate loading
+        const btn = document.querySelector('.start-cooking-btn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'Starting... <i class="fas fa-spinner fa-spin"></i>';
+        btn.disabled = true;
+
+        // Simulate navigation
+        setTimeout(() => {
+            showMessage('Welcome to Chef Mode!', 'success');
+
+            // Reset button after delay
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+        }, 1500);
+    }
+
+    function showMessage(message, type) {
+        // Remove any existing messages
+        const existingMsg = document.querySelector('.message');
+        if (existingMsg) existingMsg.remove();
+
+        // Create message element
+        const msgElement = document.createElement('div');
+        msgElement.className = `message ${type}`;
+        msgElement.textContent = message;
+        msgElement.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 15px 30px;
+                border-radius: 10px;
+                color: white;
+                font-weight: 500;
+                z-index: 1000;
+                animation: fadeIn 0.3s ease-out;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            `;
+
+        // Set background based on message type
+        if (type === 'success') {
+            msgElement.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+        } else {
+            msgElement.style.background = 'linear-gradient(to right, #e74c3c, #c0392b)';
+        }
+
+        document.body.appendChild(msgElement);
+
+        // Remove message after delay
+        setTimeout(() => {
+            msgElement.style.animation = 'fadeOut 0.3s ease-out forwards';
+            setTimeout(() => {
+                msgElement.remove();
+            }, 300);
+        }, 3000);
+
+        // Add fadeOut animation
+        const style = document.createElement('style');
+        style.textContent = `
+                @keyframes fadeOut {
+                    from { opacity: 1; top: 20px; }
+                    to { opacity: 0; top: 0; }
+                }
+            `;
+        document.head.appendChild(style);
+    }
+
+    // Initialize bubbles when page loads
+    window.onload = createBubbles;
+</script>
+</body>
+</html>
