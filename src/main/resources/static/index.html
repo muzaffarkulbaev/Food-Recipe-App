@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload and Display Image</title>
+</head>
+<body>
+
+<h2>Upload Image</h2>
+
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" id="fileInput" accept="image/*" required>
+    <button type="submit">Upload</button>
+</form>
+
+<hr>
+
+<h3>Result:</h3>
+<p id="result"></p>
+<img id="uploadedImage" src="" alt="Uploaded Image" style="max-width: 300px; display: none;">
+
+<script>
+    const form = document.getElementById('uploadForm');
+    const result = document.getElementById('result');
+    const uploadedImage = document.getElementById('uploadedImage');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('/api/file', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const attachmentId = await response.text();
+
+            result.innerHTML = `✅ Uploaded successfully! Attachment ID: <b>${attachmentId}</b>`;
+            uploadedImage.src = `/api/file/${attachmentId}`;
+            uploadedImage.style.display = 'block';
+        } else {
+            result.textContent = '❌ Upload failed.';
+            uploadedImage.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 package uz.pdp.food_recipe_app.model.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,11 @@ import uz.pdp.food_recipe_app.model.base.BaseEntity;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Attachment extends BaseEntity {
+public class Ingredient extends BaseEntity {
 
-    private String url;
+    private String name;
+
+    @ManyToOne
+    private Attachment attachment;
 
 }
