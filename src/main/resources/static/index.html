@@ -2,50 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upload and Display Image</title>
+    <title>Upload and Preview Image</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+        #preview {
+            margin-top: 20px;
+            max-width: 400px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Upload Image</h2>
-
-<form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" name="file" id="fileInput" accept="image/*" required>
+<h2>Upload an Image</h2>
+<form id="uploadForm">
+    <input type="file" id="fileInput" name="file" accept="image/*" required>
     <button type="submit">Upload</button>
 </form>
 
-<hr>
-
-<h3>Result:</h3>
-<p id="result"></p>
-<img id="uploadedImage" src="" alt="Uploaded Image" style="max-width: 300px; display: none;">
+<div id="imageContainer">
+    <h3>Uploaded Image:</h3>
+    <img id="preview" src="" alt="Uploaded image will appear here">
+</div>
 
 <script>
     const form = document.getElementById('uploadForm');
-    const result = document.getElementById('result');
-    const uploadedImage = document.getElementById('uploadedImage');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
 
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        const fileInput = document.getElementById('fileInput');
         const file = fileInput.files[0];
         const formData = new FormData();
         formData.append('file', file);
 
-        const response = await fetch('/api/file', {
-            method: 'POST',
-            body: formData
-        });
+        try {
+            // 1. Отправка изображения на /api/file (POST)
+            const uploadResponse = await axios.post('/api/file', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
 
-        if (response.ok) {
-            const attachmentId = await response.text();
+            const uuid = uploadResponse.data; // UUID, полученный от бэкенда
 
-            result.innerHTML = `✅ Uploaded successfully! Attachment ID: <b>${attachmentId}</b>`;
-            uploadedImage.src = `/api/file/${attachmentId}`;
-            uploadedImage.style.display = 'block';
-        } else {
-            result.textContent = '❌ Upload failed.';
-            uploadedImage.style.display = 'none';
+            // 2. Получение изображения по UUID: GET /api/file/{uuid}
+            const imageResponse = await axios.get(`/api/file/${uuid}`, {
+                responseType: 'blob'
+            });
+
+            // 3. Показать изображение
+            const imageUrl = URL.createObjectURL(imageResponse.data);
+            preview.src = imageUrl;
+            preview.style.display = 'block';
+
+        } catch (error) {
+            console.error('Upload or display error:', error);
+            alert('Upload failed');
         }
     });
 </script>
