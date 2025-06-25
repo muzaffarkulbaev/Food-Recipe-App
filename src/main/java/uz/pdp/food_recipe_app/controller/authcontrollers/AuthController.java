@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uz.pdp.food_recipe_app.model.dto.LoginDto;
-import uz.pdp.food_recipe_app.model.dto.RegisterDto;
+import uz.pdp.food_recipe_app.model.dto.request.LoginDto;
+import uz.pdp.food_recipe_app.model.dto.request.RegisterDto;
 import uz.pdp.food_recipe_app.model.entity.User;
-import uz.pdp.food_recipe_app.repositories.UserRepository;
+import uz.pdp.food_recipe_app.repo.UserRepository;
 import uz.pdp.food_recipe_app.service.abstractions.AuthService;
 
 @RestController

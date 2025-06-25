@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uz.pdp.food_recipe_app.model.entity.Attachment;
 import uz.pdp.food_recipe_app.repo.AttachmentRepository;
-import uz.pdp.food_recipe_app.service.AttachmentService;
-import uz.pdp.food_recipe_app.service.S3Service;
-
-import java.util.UUID;
+import uz.pdp.food_recipe_app.service.abstractions.AttachmentService;
+import uz.pdp.food_recipe_app.service.abstractions.S3Service;
 
 @Service
 @RequiredArgsConstructor
