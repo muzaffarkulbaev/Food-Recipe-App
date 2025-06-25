@@ -1,17 +1,65 @@
 package uz.pdp.food_recipe_app.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import uz.pdp.food_recipe_app.repositories.FoodRepository;
-import uz.pdp.food_recipe_app.repositories.UserRepository;
+import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
+import uz.pdp.food_recipe_app.model.dto.response.NewFoodDto;
+import uz.pdp.food_recipe_app.model.entity.Food;
+import uz.pdp.food_recipe_app.repo.FoodRepository;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class FoodServiceImpl implements FoodService {
 
-    private final FoodRepository recipeRepository;
-    private final UserRepository userRepository;
+    private final FoodRepository foodRepository;
+
+    @Override
+    public List<FoodByCategoryDto> getAllFoods() {
+        return foodRepository.findAll().stream()
+                .map(food -> new FoodByCategoryDto(
+                        food.getName(),
+                        food.getRating(),
+                        food.getPrepareTime(),
+                        food.getAttachment().getId()
+                ))
+                .toList();
+    }
+
+
+    @Override
+    public List<FoodByCategoryDto> getFoodsByCategory(Long categoryId) {
+        List<Food> foods = foodRepository.findByCategoryId(categoryId);
+        return foods.stream()
+                .map(food -> new FoodByCategoryDto(
+                        food.getName(),
+                        food.getRating(),
+                        food.getPrepareTime(),
+                        food.getAttachment().getId()
+                ))
+                .toList();
+    }
+
+    @Override
+    public List<NewFoodDto> getNewFoods() {
+        List<Food> newFoods = foodRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")); // sorted by newest first
+
+        return newFoods.stream()
+                .limit(10)
+                .map(food -> new NewFoodDto(
+                        food.getName(),
+                        food.getAttachment().getId(),
+                        food.getPrepareTime(),
+                        food.getChef().getAttachment().getId(),
+                        food.getChef().getName(),
+                        food.getRating()
+                ))
+                .toList();
+    }
+
 
 //    @Override
 //    public DashboardDto getDashboardData() {

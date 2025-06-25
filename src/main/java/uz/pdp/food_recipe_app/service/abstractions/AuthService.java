@@ -1,7 +1,7 @@
 package uz.pdp.food_recipe_app.service.abstractions;
 
-import uz.pdp.food_recipe_app.model.dto.LoginDto;
-import uz.pdp.food_recipe_app.model.dto.RegisterDto;
+import uz.pdp.food_recipe_app.model.dto.request.LoginDto;
+import uz.pdp.food_recipe_app.model.dto.request.RegisterDto;
 import uz.pdp.food_recipe_app.model.entity.User;
 
 public interface AuthService {
