@@ -3,14 +3,18 @@ package uz.pdp.food_recipe_app.model.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import uz.pdp.food_recipe_app.model.base.BaseEntity;
 
+@Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 public class Food extends BaseEntity {
 
     private String name;
