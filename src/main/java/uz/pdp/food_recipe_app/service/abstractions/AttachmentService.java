@@ -1,9 +1,7 @@
-package uz.pdp.food_recipe_app.service;
+package uz.pdp.food_recipe_app.service.abstractions;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.UUID;
 
 public interface AttachmentService {
 
