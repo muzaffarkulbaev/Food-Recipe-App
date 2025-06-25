@@ -3,12 +3,10 @@ package uz.pdp.food_recipe_app.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
-import uz.pdp.food_recipe_app.model.dto.response.NewFoodDto;
+import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
 import java.util.List;
@@ -22,7 +20,7 @@ public class FoodController {
 
 
     @GetMapping("/new")
-    public ResponseEntity<List<NewFoodDto>> getNewFoods() {
+    public ResponseEntity<List<NewFoodsListDto>> getNewFoods() {
        return new ResponseEntity<>(foodService.getNewFoods(), HttpStatus.OK);
     }
 
@@ -34,5 +32,17 @@ public class FoodController {
     @GetMapping("/{categoryId}")
     public ResponseEntity<List<FoodByCategoryDto>> getFoodByCategory(@PathVariable Long categoryId) {
         return new ResponseEntity<>(foodService.getFoodsByCategory(categoryId), HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addNewFood(@RequestBody FoodAddDto foodAddDto) {
+        try {
+            foodService.addNewFood(foodAddDto);
+            return ResponseEntity.ok("Food successfully added");
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(ex.getMessage());
+        }
     }
 }
