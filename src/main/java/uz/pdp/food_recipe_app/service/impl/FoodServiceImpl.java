@@ -3,6 +3,7 @@ package uz.pdp.food_recipe_app.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.repositories.FoodRepository;
+import uz.pdp.food_recipe_app.repositories.UserRepository;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
 @Service
@@ -12,8 +13,8 @@ public class FoodServiceImpl implements FoodService {
     private final FoodRepository recipeRepository;
     private final UserRepository userRepository;
 
-    @Override
-    public DashboardDto getDashboardData() {
+//    @Override
+//    public DashboardDto getDashboardData() {
 
 //        User user = userRepository.findById(1)
 //                .orElseThrow(() -> new RuntimeException("User not found"));
@@ -30,6 +31,6 @@ public class FoodServiceImpl implements FoodService {
 //                .featuredRecipes(featured.stream().map(FoodDto::from).toList())
 //                .newRecipes(newRecipes.stream().map(FoodDto::from).toList())
 //                .build();
-        return null;
-    }
+//        return null;
+//    }
 }

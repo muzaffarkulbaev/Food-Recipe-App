@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.pdp.food_recipe_app.service.AttachmentService;
 
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/file")
@@ -16,12 +15,12 @@ public class AttachmentController {
     private final AttachmentService attachmentService;
 
     @PostMapping
-    public UUID uploadFile(@RequestParam("file") MultipartFile file) {
+    public Long uploadFile(@RequestParam("file") MultipartFile file) {
         return attachmentService.upload(file);
     }
 
     @GetMapping("/{attachmentId}")
-    public void getFile(@PathVariable UUID attachmentId, HttpServletResponse response) {
+    public void getFile(@PathVariable Long attachmentId, HttpServletResponse response) {
         attachmentService.get(attachmentId, response);
     }
 

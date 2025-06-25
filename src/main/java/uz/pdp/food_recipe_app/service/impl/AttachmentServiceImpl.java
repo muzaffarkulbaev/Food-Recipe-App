@@ -20,7 +20,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     private final AttachmentRepository attachmentRepository;
 
     @Override
-    public UUID upload(MultipartFile file) {
+    public Long upload(MultipartFile file) {
         Attachment attachment = new Attachment();
         String key = s3Service.uploadImage(file);
         attachment.setUrl(key);
@@ -30,7 +30,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @SneakyThrows
     @Override
-    public void get(UUID attachmentId, HttpServletResponse response) {
+    public void get(Long attachmentId, HttpServletResponse response) {
         Attachment attachment = attachmentRepository.findById(attachmentId).orElseThrow();
         byte[] image = s3Service.getImage(attachment.getUrl());
         response.getOutputStream().write(image);

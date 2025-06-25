@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface AttachmentService {
 
-    UUID upload(MultipartFile file);
+    Long upload(MultipartFile file);
 
-    void get(UUID attachmentId, HttpServletResponse response);
+    void get(Long attachmentId, HttpServletResponse response);
 }

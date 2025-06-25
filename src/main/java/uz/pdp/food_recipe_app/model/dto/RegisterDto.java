@@ -11,7 +11,6 @@ public class RegisterDto {
     String password;
     String confirmPassword;
 
-
 }
 
 
