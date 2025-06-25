@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.model.dto.UserDto;
 import uz.pdp.food_recipe_app.model.entity.User;
 import uz.pdp.food_recipe_app.repositories.UserRepository;
-import uz.pdp.food_recipe_app.service.UserService;
+import uz.pdp.food_recipe_app.service.abstractions.UserService;
 
 @Service
 @RequiredArgsConstructor

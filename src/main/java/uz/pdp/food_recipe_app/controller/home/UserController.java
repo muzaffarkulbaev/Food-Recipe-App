@@ -1,4 +1,4 @@
-package uz.pdp.food_recipe_app.controller.dashcontrollers;
+package uz.pdp.food_recipe_app.controller.home;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uz.pdp.food_recipe_app.model.dto.UserDto;
-import uz.pdp.food_recipe_app.service.UserService;
+import uz.pdp.food_recipe_app.service.abstractions.UserService;
 
 @RestController
 @RequestMapping("/api/user")
@@ -21,10 +21,4 @@ public class UserController {
         UserDto userDto = userService.getUser(userId);
         return ResponseEntity.ok(userDto);
     }
-
-
-
-
-
-
 }

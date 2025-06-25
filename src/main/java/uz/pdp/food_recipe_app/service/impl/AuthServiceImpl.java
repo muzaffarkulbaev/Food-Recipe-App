@@ -8,8 +8,7 @@ import uz.pdp.food_recipe_app.model.dto.LoginDto;
 import uz.pdp.food_recipe_app.model.dto.RegisterDto;
 import uz.pdp.food_recipe_app.model.entity.User;
 import uz.pdp.food_recipe_app.model.enums.Role;
-import uz.pdp.food_recipe_app.repositories.UserRepository;
-import uz.pdp.food_recipe_app.service.AuthService;
+import uz.pdp.food_recipe_app.service.abstractions.AuthService;
 
 @Service
 @RequiredArgsConstructor

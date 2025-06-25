@@ -2,10 +2,8 @@ package uz.pdp.food_recipe_app.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uz.pdp.food_recipe_app.model.dto.DashboardDto;
 import uz.pdp.food_recipe_app.repositories.FoodRepository;
-import uz.pdp.food_recipe_app.repositories.UserRepository;
-import uz.pdp.food_recipe_app.service.FoodService;
+import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +27,8 @@ public class FoodServiceImpl implements FoodService {
 //                       // .avatarUrl(user.getAvatarUrl())
 //                        .build())
 //                .categories(List.of("All", "Indian", "Italian", "Asian", "Chinese"))
-//                .featuredRecipes(featured.stream().map(FoodResponseDto::from).toList())
-//                .newRecipes(newRecipes.stream().map(FoodResponseDto::from).toList())
+//                .featuredRecipes(featured.stream().map(FoodDto::from).toList())
+//                .newRecipes(newRecipes.stream().map(FoodDto::from).toList())
 //                .build();
         return null;
     }
