@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload and Preview Image</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+        #preview {
+            margin-top: 20px;
+            max-width: 400px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Upload an Image</h2>
+<form id="uploadForm">
+    <input type="file" id="fileInput" name="file" accept="image/*" required>
+    <button type="submit">Upload</button>
+</form>
+
+<div id="imageContainer">
+    <h3>Uploaded Image:</h3>
+    <img id="preview" src="" alt="Uploaded image will appear here">
+</div>
+
+<script>
+    const form = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            // 1. Отправка изображения на /api/file (POST)
+            const uploadResponse = await axios.post('/api/file', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            const uuid = uploadResponse.data; // UUID, полученный от бэкенда
+
+            // 2. Получение изображения по UUID: GET /api/file/{uuid}
+            const imageResponse = await axios.get(`/api/file/${uuid}`, {
+                responseType: 'blob'
+            });
+
+            // 3. Показать изображение
+            const imageUrl = URL.createObjectURL(imageResponse.data);
+            preview.src = imageUrl;
+            preview.style.display = 'block';
+
+        } catch (error) {
+            console.error('Upload or display error:', error);
+            alert('Upload failed');
+        }
+    });
+</script>
+
+</body>
+</html>
