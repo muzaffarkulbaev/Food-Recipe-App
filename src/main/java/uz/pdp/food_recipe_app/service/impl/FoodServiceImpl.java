@@ -15,6 +15,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FoodServiceImpl implements FoodService {
+    @Override
+    public List<Food> getFoodByUserId(Long userId) {
+        return foodRepository.findByChefId(userId);
+    }
 
     private final FoodRepository foodRepository;
 
@@ -24,7 +28,7 @@ public class FoodServiceImpl implements FoodService {
                 .map(food -> new FoodByCategoryDto(
                         food.getName(),
                         food.getRating(),
-                        food.getPrepareTime(),
+                        food.getCookingTime(),
                         food.getAttachment().getId()
                 ))
                 .toList();
@@ -38,7 +42,7 @@ public class FoodServiceImpl implements FoodService {
                 .map(food -> new FoodByCategoryDto(
                         food.getName(),
                         food.getRating(),
-                        food.getPrepareTime(),
+                        food.getCookingTime(),
                         food.getAttachment().getId()
                 ))
                 .toList();
@@ -68,7 +72,7 @@ public class FoodServiceImpl implements FoodService {
                 .description(foodAddDto.getDescription())
                 .cookingTime(foodAddDto.getCookingTime())
                 .build();
-                foodRepository.save(newFood);
+        foodRepository.save(newFood);
     }
 
 
