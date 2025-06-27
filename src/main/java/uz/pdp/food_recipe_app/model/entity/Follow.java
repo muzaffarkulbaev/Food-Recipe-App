@@ -22,5 +22,5 @@ import uz.pdp.food_recipe_app.model.base.BaseEntity;
         private User follower;
 
         @ManyToOne
-        private User chef;
+        private User user;
     }

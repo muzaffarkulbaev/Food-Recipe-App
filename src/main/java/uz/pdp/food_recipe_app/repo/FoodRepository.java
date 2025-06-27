@@ -11,6 +11,6 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 
     List<Food> findByCategoryId(Long categoryId);
 
-    List<Food> findByChefId(Long userId);
+    List<Food> findByUserId(Long userId);
 }
 

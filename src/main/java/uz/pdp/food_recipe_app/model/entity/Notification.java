@@ -16,7 +16,7 @@ public class Notification extends BaseEntity {
     private String message;
 
     @ManyToOne
-    private User chef;
+    private User user;
 
     @ManyToOne
     private User receiverUser;

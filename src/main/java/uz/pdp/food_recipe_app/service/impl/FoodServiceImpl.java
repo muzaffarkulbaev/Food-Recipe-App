@@ -9,7 +9,7 @@ import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.model.entity.Food;
 import uz.pdp.food_recipe_app.model.entity.FoodIngredient;
 import uz.pdp.food_recipe_app.model.entity.Ingredient;
-import uz.pdp.food_recipe_app.repo.FoodIngredientRepo;
+import uz.pdp.food_recipe_app.repo.FoodIngredientRepository;
 import uz.pdp.food_recipe_app.repo.FoodRepository;
 import uz.pdp.food_recipe_app.repo.IngredientRepository;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
@@ -22,7 +22,7 @@ public class FoodServiceImpl implements FoodService {
 
     private final FoodRepository foodRepository;
     private final IngredientRepository ingredientRepository;
-    private final FoodIngredientRepo foodIngredientRepo;
+    private final FoodIngredientRepository foodIngredientRepository;
 
     @Override
     public List<FoodByCategoryDto> getAllFoods() {
@@ -60,8 +60,8 @@ public class FoodServiceImpl implements FoodService {
                         food.getName(),
                         food.getAttachment().getId(),
                         food.getCookingTime(),
-                        food.getChef().getAttachment().getId(),
-                        food.getChef().getName(),
+                        food.getUser().getAttachment().getId(),
+                        food.getUser().getName(),
                         food.getRating()
                 ))
                 .toList();
@@ -73,9 +73,10 @@ public class FoodServiceImpl implements FoodService {
                 .name(foodAddDto.getName())
                 .description(foodAddDto.getDescription())
                 .cookingTime(foodAddDto.getCookingTime())
+                .user(foodAddDto.getUser())
                 .build();
         foodRepository.save(newFood);
-        foodRepository.save(newFood);
+
 
         foodAddDto.getIngredients().forEach(ingredient -> {
             if(ingredientRepository.findByName(ingredient.getName()) == null) {
@@ -91,7 +92,7 @@ public class FoodServiceImpl implements FoodService {
                         .ingredient(savedIngredient)
                         .food(newFood)
                         .build();
-                foodIngredientRepo.save(foodIngredient);
+                foodIngredientRepository.save(foodIngredient);
             }else {
                 Ingredient existIngredient = ingredientRepository.findByName(ingredient.getName());
                 FoodIngredient foodIngredient = FoodIngredient.builder()
@@ -99,7 +100,7 @@ public class FoodServiceImpl implements FoodService {
                         .ingredient(existIngredient)
                         .food(newFood)
                         .build();
-                foodIngredientRepo.save(foodIngredient);
+                foodIngredientRepository.save(foodIngredient);
             }
         });
     }

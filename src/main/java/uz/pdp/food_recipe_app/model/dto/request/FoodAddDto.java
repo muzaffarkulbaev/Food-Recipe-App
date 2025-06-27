@@ -1,7 +1,8 @@
 package uz.pdp.food_recipe_app.model.dto.request;
 
+import jakarta.persistence.ManyToMany;
 import lombok.Value;
-import uz.pdp.food_recipe_app.model.entity.Ingredient;
+import uz.pdp.food_recipe_app.model.entity.User;
 
 import java.util.List;
 
@@ -11,6 +12,9 @@ public class FoodAddDto {
     String description;
     String imageUrl;
     Short cookingTime;
-    Long chefId;
     List<IngredientDto> ingredients;
+
+    @ManyToMany
+    User user;
+
 }

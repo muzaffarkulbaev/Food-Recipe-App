@@ -7,7 +7,7 @@ import uz.pdp.food_recipe_app.model.entity.Follow;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
-    @Query("SELECT COUNT(f) FROM Follow f WHERE f.chef.id = :userId")
+    @Query("SELECT COUNT(f) FROM Follow f WHERE f.user.id = :userId")
     Integer countFollowersByChefId(@Param("userId") Long userId);
 
     @Query("SELECT COUNT(f) FROM Follow f WHERE f.follower.id = :userId")
