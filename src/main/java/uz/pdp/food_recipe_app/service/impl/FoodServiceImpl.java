@@ -7,7 +7,11 @@ import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.model.entity.Food;
+import uz.pdp.food_recipe_app.model.entity.FoodIngredient;
+import uz.pdp.food_recipe_app.model.entity.Ingredient;
+import uz.pdp.food_recipe_app.repo.FoodIngredientRepo;
 import uz.pdp.food_recipe_app.repo.FoodRepository;
+import uz.pdp.food_recipe_app.repo.IngredientRepository;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
 import java.util.List;
@@ -17,6 +21,8 @@ import java.util.List;
 public class FoodServiceImpl implements FoodService {
 
     private final FoodRepository foodRepository;
+    private final IngredientRepository ingredientRepository;
+    private final FoodIngredientRepo foodIngredientRepo;
 
     @Override
     public List<FoodByCategoryDto> getAllFoods() {
@@ -96,6 +102,11 @@ public class FoodServiceImpl implements FoodService {
                 foodIngredientRepo.save(foodIngredient);
             }
         });
+    }
+
+    @Override
+    public List<Food> getFoodByUserId(Long userId) {
+        return List.of();
     }
 
 
