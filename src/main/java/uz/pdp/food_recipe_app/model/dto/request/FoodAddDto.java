@@ -4,9 +4,9 @@ import lombok.Value;
 
 @Value
 public class FoodAddDto {
-    String title;
+    String name;
+    String description;
     String imageUrl;
-    int cookingTime;
-    String chefName;
-    Float rating;
+    Short cookingTime;
+    Long chefId;
 }

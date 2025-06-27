@@ -3,8 +3,9 @@ package uz.pdp.food_recipe_app.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
-import uz.pdp.food_recipe_app.model.dto.response.NewFoodDto;
+import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.model.entity.Food;
 import uz.pdp.food_recipe_app.repo.FoodRepository;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
@@ -44,15 +45,15 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<NewFoodDto> getNewFoods() {
+    public List<NewFoodsListDto> getNewFoods() {
         List<Food> newFoods = foodRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")); // sorted by newest first
 
         return newFoods.stream()
                 .limit(10)
-                .map(food -> new NewFoodDto(
+                .map(food -> new NewFoodsListDto(
                         food.getName(),
                         food.getAttachment().getId(),
-                        food.getPrepareTime(),
+                        food.getCookingTime(),
                         food.getChef().getAttachment().getId(),
                         food.getChef().getName(),
                         food.getRating()
@@ -61,8 +62,13 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<Food> getFoodByUserId(Long userId) {
-        return foodRepository.findByChefId(userId);
+    public void addNewFood(FoodAddDto foodAddDto) {
+        Food newFood = Food.builder()
+                .name(foodAddDto.getName())
+                .description(foodAddDto.getDescription())
+                .cookingTime(foodAddDto.getCookingTime())
+                .build();
+                foodRepository.save(newFood);
     }
 
 
