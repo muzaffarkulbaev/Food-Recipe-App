@@ -9,8 +9,6 @@ import lombok.experimental.SuperBuilder;
 import uz.pdp.food_recipe_app.model.base.BaseEntity;
 import uz.pdp.food_recipe_app.model.enums.Role;
 
-import java.util.UUID;
-
 @Entity
 @Getter
 @Setter
@@ -25,6 +23,8 @@ public class User extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    private String bio;
 
     @Column(nullable = false)
     private String password;

@@ -60,6 +60,11 @@ public class FoodServiceImpl implements FoodService {
                 .toList();
     }
 
+    @Override
+    public List<Food> getFoodByUserId(Long userId) {
+        return foodRepository.findByChefId(userId);
+    }
+
 
 //    @Override
 //    public DashboardDto getDashboardData() {

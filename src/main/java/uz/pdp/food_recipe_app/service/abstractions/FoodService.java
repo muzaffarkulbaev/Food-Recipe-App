@@ -11,6 +11,6 @@ public interface FoodService {
     List<FoodByCategoryDto> getAllFoods();
     List<FoodByCategoryDto> getFoodsByCategory(Long categoryId);
     List<NewFoodDto> getNewFoods();
-
+    List<Food> getFoodByUserId(Long userId);
 
 }
