@@ -18,7 +18,6 @@ public class FoodController {
 
     private final FoodService foodService;
 
-
     @GetMapping("/new")
     public ResponseEntity<List<NewFoodsListDto>> getNewFoods() {
        return new ResponseEntity<>(foodService.getNewFoods(), HttpStatus.OK);
@@ -45,4 +44,5 @@ public class FoodController {
                     .body(ex.getMessage());
         }
     }
+
 }

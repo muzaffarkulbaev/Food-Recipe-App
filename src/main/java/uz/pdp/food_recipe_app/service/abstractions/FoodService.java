@@ -12,6 +12,4 @@ public interface FoodService {
     List<FoodByCategoryDto> getFoodsByCategory(Long categoryId);
     List<NewFoodsListDto> getNewFoods();
     void addNewFood(FoodAddDto foodAddDto);
-
-
 }
