@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 import uz.pdp.food_recipe_app.model.base.BaseEntity;
 import uz.pdp.food_recipe_app.model.enums.Role;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
