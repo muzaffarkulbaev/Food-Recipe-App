@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import uz.pdp.food_recipe_app.service.AttachmentService;
+import uz.pdp.food_recipe_app.service.abstractions.AttachmentService;
 
 
 @RestController
