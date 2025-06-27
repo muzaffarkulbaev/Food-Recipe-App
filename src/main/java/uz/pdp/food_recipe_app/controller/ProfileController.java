@@ -13,7 +13,7 @@ import uz.pdp.food_recipe_app.service.abstractions.UserService;
 @RestController
 @RequestMapping("/api/profile")
 @RequiredArgsConstructor
-public class UserController {
+public class ProfileController {
 
     private final UserService userService;
 
@@ -21,5 +21,6 @@ public class UserController {
     public ResponseEntity<UserProfileDto> getUserProfileDataById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getUserProfileData(id), HttpStatus.OK);
     }
+
 
 }
