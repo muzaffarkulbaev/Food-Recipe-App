@@ -24,7 +24,7 @@ public class FoodServiceImpl implements FoodService {
                 .map(food -> new FoodByCategoryDto(
                         food.getName(),
                         food.getRating(),
-                        food.getCookingTime(),
+                        food.getPrepareTime(),
                         food.getAttachment().getId()
                 ))
                 .toList();
@@ -38,7 +38,7 @@ public class FoodServiceImpl implements FoodService {
                 .map(food -> new FoodByCategoryDto(
                         food.getName(),
                         food.getRating(),
-                        food.getCookingTime(),
+                        food.getPrepareTime(),
                         food.getAttachment().getId()
                 ))
                 .toList();
