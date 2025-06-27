@@ -14,11 +14,14 @@ import uz.pdp.food_recipe_app.model.base.BaseEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class Ingredient extends BaseEntity {
-
-    private String name;
+public class FoodIngredient extends BaseEntity {
 
     @ManyToOne
-    private Attachment attachment;
+    private Ingredient ingredient;
+
+    @ManyToOne
+    private Food food;
+
+    private Integer quantity;
 
 }

@@ -11,7 +11,7 @@ import uz.pdp.food_recipe_app.model.dto.response.UserProfileDto;
 import uz.pdp.food_recipe_app.service.abstractions.UserService;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/profile")
 @RequiredArgsConstructor
 public class UserController {
 
