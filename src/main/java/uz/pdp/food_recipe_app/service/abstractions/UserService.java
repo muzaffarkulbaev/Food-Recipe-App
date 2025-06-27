@@ -6,8 +6,7 @@ import uz.pdp.food_recipe_app.model.dto.response.UserProfileDto;
 
 public interface UserService {
 
-    UserDto getUser(int userId);
-
+    UserDto getUserById(Long userId);
     UserProfileDto getUserProfileData(Long userId);
 
 }

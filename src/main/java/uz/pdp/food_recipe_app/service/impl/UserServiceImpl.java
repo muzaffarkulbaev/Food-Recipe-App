@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private final FollowService followService;
 
     @Override
-    public UserDto getUser(int userId) {
+    public UserDto getUserById(Long userId) {
         return null;
     }
 
