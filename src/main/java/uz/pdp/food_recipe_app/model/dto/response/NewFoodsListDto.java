@@ -8,6 +8,6 @@ public class NewFoodsListDto {
     Long foodPhotoId;
     Short cookingTime;
     Long userPhotoId;
-    String chefName;
+    String userName;
     Float rating;
 }

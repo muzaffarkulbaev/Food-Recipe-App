@@ -21,11 +21,10 @@ public class Food extends BaseEntity {
     private String description;
     private Short cookingTime;
     private Float rating;
-    private String userName;
     @ManyToOne
     private Attachment attachment;
     @ManyToOne
     private Category category;
     @ManyToOne
-    private User user;
+    User user;
 }

@@ -12,9 +12,6 @@ public class FoodAddDto {
     String description;
     String imageUrl;
     Short cookingTime;
+    Long userId;
     List<IngredientDto> ingredients;
-
-    @ManyToMany
-    User user;
-
 }

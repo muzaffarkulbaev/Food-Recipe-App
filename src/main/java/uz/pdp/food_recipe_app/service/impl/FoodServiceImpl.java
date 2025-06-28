@@ -3,15 +3,12 @@ package uz.pdp.food_recipe_app.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import uz.pdp.food_recipe_app.model.dto.request.FavouriteFoodDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
-import uz.pdp.food_recipe_app.model.entity.Food;
-import uz.pdp.food_recipe_app.model.entity.FoodIngredient;
-import uz.pdp.food_recipe_app.model.entity.Ingredient;
-import uz.pdp.food_recipe_app.repo.FoodIngredientRepository;
-import uz.pdp.food_recipe_app.repo.FoodRepository;
-import uz.pdp.food_recipe_app.repo.IngredientRepository;
+import uz.pdp.food_recipe_app.model.entity.*;
+import uz.pdp.food_recipe_app.repo.*;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
 import java.util.List;
@@ -23,6 +20,7 @@ public class FoodServiceImpl implements FoodService {
     private final FoodRepository foodRepository;
     private final IngredientRepository ingredientRepository;
     private final FoodIngredientRepository foodIngredientRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<FoodByCategoryDto> getAllFoods() {
@@ -52,8 +50,7 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<NewFoodsListDto> getNewFoods() {
-        List<Food> newFoods = foodRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")); // sorted by newest first
-
+        List<Food> newFoods = foodRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         return newFoods.stream()
                 .limit(10)
                 .map(food -> new NewFoodsListDto(
@@ -69,11 +66,12 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void addNewFood(FoodAddDto foodAddDto) {
+        User newFoodUser = userRepository.findById(foodAddDto.getUserId()).orElse(null);
         Food newFood = Food.builder()
                 .name(foodAddDto.getName())
                 .description(foodAddDto.getDescription())
                 .cookingTime(foodAddDto.getCookingTime())
-                .user(foodAddDto.getUser())
+                .user(newFoodUser)
                 .build();
         foodRepository.save(newFood);
 
