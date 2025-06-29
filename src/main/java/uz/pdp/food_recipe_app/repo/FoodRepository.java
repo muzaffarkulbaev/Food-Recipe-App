@@ -1,6 +1,7 @@
 package uz.pdp.food_recipe_app.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import uz.pdp.food_recipe_app.model.entity.FavouriteFood;
 import uz.pdp.food_recipe_app.model.entity.Food;
 
 import java.util.List;
@@ -14,5 +15,8 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     List<Food> findByUserId(Long userId);
 
     List<Food> findAllByUserId(Long userId);
+
+    List<Food> findByIdIn(List<Long> ids);
+
 }
 

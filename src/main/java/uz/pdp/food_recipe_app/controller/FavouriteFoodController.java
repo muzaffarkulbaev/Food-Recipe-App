@@ -1,11 +1,9 @@
 package uz.pdp.food_recipe_app.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.pdp.food_recipe_app.model.dto.request.FavouriteFoodDto;
 import uz.pdp.food_recipe_app.service.abstractions.FavouriteFoodService;
 
@@ -39,5 +37,10 @@ public class FavouriteFoodController {
                     .badRequest()
                     .body(ex.getMessage());
         }
+    }
+
+    @GetMapping("/list/{userId}")
+    public ResponseEntity<?> getUserFavouriteFoods(@PathVariable Long userId) {
+        return ResponseEntity.ok(favouriteFoodService.getAllFavouriteFood(userId));
     }
 }
