@@ -3,10 +3,8 @@ package uz.pdp.food_recipe_app.controller.authcontrollers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.pdp.food_recipe_app.model.dto.request.LoginDto;
 import uz.pdp.food_recipe_app.model.dto.request.RegisterDto;
 import uz.pdp.food_recipe_app.model.entity.User;
@@ -23,19 +21,22 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+        System.out.println("logging is started");
         User user = authService.login(loginDto);
         if (user == null) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid email or password");
         }
+        System.out.println("successfully logged in");
         return ResponseEntity.ok(user);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<?> register(@RequestPart("data") RegisterDto registerDto,
+                                      @RequestPart("photo") MultipartFile photo) {
         try {
-            authService.register(registerDto);
+            authService.register(registerDto,photo);
             return ResponseEntity.ok("User successfully registered");
         } catch (Exception ex) {
             return ResponseEntity

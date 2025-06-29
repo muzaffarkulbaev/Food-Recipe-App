@@ -24,7 +24,7 @@ public class FoodServiceImpl implements FoodService {
                 .map(food -> new FoodByCategoryDto(
                         food.getName(),
                         food.getRating(),
-                        food.getPrepareTime(),
+                        food.getCookingTime(),
                         food.getAttachment().getId()
                 ))
                 .toList();
@@ -38,7 +38,7 @@ public class FoodServiceImpl implements FoodService {
                 .map(food -> new FoodByCategoryDto(
                         food.getName(),
                         food.getRating(),
-                        food.getPrepareTime(),
+                        food.getCookingTime(),
                         food.getAttachment().getId()
                 ))
                 .toList();
@@ -69,6 +69,11 @@ public class FoodServiceImpl implements FoodService {
                 .cookingTime(foodAddDto.getCookingTime())
                 .build();
                 foodRepository.save(newFood);
+    }
+
+    @Override
+    public List<Food> getFoodByUserId(Long userId) {
+        return List.of();
     }
 
 

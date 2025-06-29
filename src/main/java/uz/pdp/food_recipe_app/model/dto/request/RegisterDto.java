@@ -10,7 +10,6 @@ public class RegisterDto {
     String email;
     String password;
     String confirmPassword;
-
 }
 
 
