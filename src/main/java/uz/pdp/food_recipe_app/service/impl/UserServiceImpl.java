@@ -40,7 +40,8 @@ public class UserServiceImpl implements UserService {
 
         String name = user.getName();
         String bio = user.getBio();
-        Long photoId = user.getAttachment().getId();
+//        Long photoId = user.getAttachment().getId();
+        Long photoId = 1L;
         List<Food> recipes = foodService.getFoodByUserId(userId);
         Integer followersAmount = followService.findFollowersById(userId);
         Integer followingsAmount = followService.findFollowingsById(userId);

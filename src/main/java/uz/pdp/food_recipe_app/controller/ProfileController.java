@@ -21,6 +21,4 @@ public class ProfileController {
     public ResponseEntity<UserProfileDto> getUserProfileDataById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getUserProfileData(id), HttpStatus.OK);
     }
-
-
 }

@@ -15,6 +15,9 @@ import uz.pdp.food_recipe_app.model.base.BaseEntity;
 @NoArgsConstructor
 @SuperBuilder
 public class FavouriteFood extends BaseEntity {
+
     Long userId;
+
     Long foodId;
+
 }
