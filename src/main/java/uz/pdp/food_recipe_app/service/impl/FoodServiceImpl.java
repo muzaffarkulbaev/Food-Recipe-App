@@ -3,11 +3,12 @@ package uz.pdp.food_recipe_app.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import uz.pdp.food_recipe_app.model.dto.request.FavouriteFoodDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
-import uz.pdp.food_recipe_app.model.entity.Food;
-import uz.pdp.food_recipe_app.repo.FoodRepository;
+import uz.pdp.food_recipe_app.model.entity.*;
+import uz.pdp.food_recipe_app.repo.*;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
 import java.util.List;
@@ -17,6 +18,9 @@ import java.util.List;
 public class FoodServiceImpl implements FoodService {
 
     private final FoodRepository foodRepository;
+    private final IngredientRepository ingredientRepository;
+    private final FoodIngredientRepository foodIngredientRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<FoodByCategoryDto> getAllFoods() {
@@ -46,16 +50,15 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<NewFoodsListDto> getNewFoods() {
-        List<Food> newFoods = foodRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")); // sorted by newest first
-
+        List<Food> newFoods = foodRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         return newFoods.stream()
                 .limit(10)
                 .map(food -> new NewFoodsListDto(
                         food.getName(),
                         food.getAttachment().getId(),
                         food.getCookingTime(),
-                        food.getChef().getAttachment().getId(),
-                        food.getChef().getName(),
+                        food.getUser().getAttachment().getId(),
+                        food.getUser().getName(),
                         food.getRating()
                 ))
                 .toList();
@@ -63,12 +66,46 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void addNewFood(FoodAddDto foodAddDto) {
+        User newFoodUser = userRepository.findById(foodAddDto.getUserId()).orElse(null);
         Food newFood = Food.builder()
                 .name(foodAddDto.getName())
                 .description(foodAddDto.getDescription())
                 .cookingTime(foodAddDto.getCookingTime())
+                .user(newFoodUser)
                 .build();
-                foodRepository.save(newFood);
+        foodRepository.save(newFood);
+
+
+        foodAddDto.getIngredients().forEach(ingredient -> {
+            if(ingredientRepository.findByName(ingredient.getName()) == null) {
+
+                Ingredient newIngredient = Ingredient.builder()
+                        .name(ingredient.getName())
+                        .build();
+
+                Ingredient savedIngredient = ingredientRepository.save(newIngredient);
+
+                FoodIngredient foodIngredient = FoodIngredient.builder()
+                        .quantity(ingredient.getQuantity())
+                        .ingredient(savedIngredient)
+                        .food(newFood)
+                        .build();
+                foodIngredientRepository.save(foodIngredient);
+            }else {
+                Ingredient existIngredient = ingredientRepository.findByName(ingredient.getName());
+                FoodIngredient foodIngredient = FoodIngredient.builder()
+                        .quantity(ingredient.getQuantity())
+                        .ingredient(existIngredient)
+                        .food(newFood)
+                        .build();
+                foodIngredientRepository.save(foodIngredient);
+            }
+        });
+    }
+
+    @Override
+    public List<Food> getFoodByUserId(Long userId) {
+        return List.of();
     }
 
     @Override

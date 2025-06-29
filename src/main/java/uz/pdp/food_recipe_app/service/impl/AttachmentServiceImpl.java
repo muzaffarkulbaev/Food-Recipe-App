@@ -33,4 +33,5 @@ public class AttachmentServiceImpl implements AttachmentService {
         byte[] image = s3Service.getImage(attachment.getUrl());
         response.getOutputStream().write(image);
     }
+
 }

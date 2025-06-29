@@ -1,6 +1,5 @@
 package uz.pdp.food_recipe_app.model.entity;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -22,5 +21,6 @@ import uz.pdp.food_recipe_app.model.base.BaseEntity;
         private User follower;
 
         @ManyToOne
-        private User chef;
+        private User user;
+
     }

@@ -1,7 +1,6 @@
 package uz.pdp.food_recipe_app.model.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,11 +21,10 @@ public class Food extends BaseEntity {
     private String description;
     private Short cookingTime;
     private Float rating;
-    private String chefName;
     @ManyToOne
     private Attachment attachment;
     @ManyToOne
     private Category category;
     @ManyToOne
-    private User chef;
+    User user;
 }

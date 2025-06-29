@@ -9,5 +9,5 @@ public class UserProfileDto {
     String bio;
     Integer followers;
     Integer following;
-    Integer recipeAmount;
+    Integer foodAmount;
 }

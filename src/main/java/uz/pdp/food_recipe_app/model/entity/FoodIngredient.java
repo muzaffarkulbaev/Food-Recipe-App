@@ -2,25 +2,26 @@ package uz.pdp.food_recipe_app.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import uz.pdp.food_recipe_app.model.base.BaseEntity;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "notifications")
-public class Notification extends BaseEntity {
-
-    private String message;
+@SuperBuilder
+public class FoodIngredient extends BaseEntity {
 
     @ManyToOne
-    private User user;
+    private Ingredient ingredient;
 
     @ManyToOne
-    private User receiverUser;
+    private Food food;
 
-    private Boolean isRead = false;
+    private Integer quantity;
 
 }
