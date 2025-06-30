@@ -25,10 +25,8 @@ public class ProfileController {
         return new ResponseEntity<>(userService.getUserProfileData(id), HttpStatus.OK);
     }
 
-
     @GetMapping("/recipes/{id}")
     public ResponseEntity<List<UserProfileRecipeDto>> getUserProfileRecipesDataById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getUserProfileRecipesDataById(id), HttpStatus.OK);
     }
-
 }

@@ -4,8 +4,13 @@ import lombok.Value;
 
 @Value
 public class FavouriteFoodListDto {
+
     String foodName;
+
     String chefName;
+
     Short prepareTime;
+
     Float rating;
+
 }

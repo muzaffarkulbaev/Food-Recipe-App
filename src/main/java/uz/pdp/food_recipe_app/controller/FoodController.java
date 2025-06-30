@@ -4,13 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.pdp.food_recipe_app.model.dto.request.FavouriteFoodDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
-import uz.pdp.food_recipe_app.service.abstractions.FavouriteFoodService;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
-
 
 import java.util.List;
 
@@ -20,7 +17,6 @@ import java.util.List;
 public class FoodController {
 
     private final FoodService foodService;
-
 
     @GetMapping("/new")
     public ResponseEntity<List<NewFoodsListDto>> getNewFoods() {
@@ -48,5 +44,4 @@ public class FoodController {
                     .body(ex.getMessage());
         }
     }
-
 }

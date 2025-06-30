@@ -4,10 +4,17 @@ import lombok.Value;
 
 @Value
 public class UserProfileDto {
+
     String name;
+
     Long photoId;
+
     String bio;
+
     Integer followers;
+
     Integer following;
+
     Integer foodAmount;
+
 }

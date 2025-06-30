@@ -3,12 +3,17 @@ package uz.pdp.food_recipe_app.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import uz.pdp.food_recipe_app.model.dto.request.FavouriteFoodDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
-import uz.pdp.food_recipe_app.model.entity.*;
-import uz.pdp.food_recipe_app.repo.*;
+import uz.pdp.food_recipe_app.model.entity.Food;
+import uz.pdp.food_recipe_app.model.entity.FoodIngredient;
+import uz.pdp.food_recipe_app.model.entity.Ingredient;
+import uz.pdp.food_recipe_app.model.entity.User;
+import uz.pdp.food_recipe_app.repo.FoodIngredientRepository;
+import uz.pdp.food_recipe_app.repo.FoodRepository;
+import uz.pdp.food_recipe_app.repo.IngredientRepository;
+import uz.pdp.food_recipe_app.repo.UserRepository;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
 import java.util.List;
@@ -33,7 +38,6 @@ public class FoodServiceImpl implements FoodService {
                 ))
                 .toList();
     }
-
 
     @Override
     public List<FoodByCategoryDto> getFoodsByCategory(Long categoryId) {

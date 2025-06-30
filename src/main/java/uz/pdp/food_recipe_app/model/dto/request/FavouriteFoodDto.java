@@ -4,6 +4,9 @@ import lombok.Value;
 
 @Value
 public class FavouriteFoodDto {
+
     Long foodId;
+
     Long userId;
+
 }

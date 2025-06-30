@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.pdp.food_recipe_app.service.abstractions.AttachmentService;
 
-
 @RestController
 @RequestMapping("/api/file")
 @RequiredArgsConstructor
@@ -23,5 +22,4 @@ public class AttachmentController {
     public void getFile(@PathVariable Long attachmentId, HttpServletResponse response) {
         attachmentService.get(attachmentId, response);
     }
-
 }

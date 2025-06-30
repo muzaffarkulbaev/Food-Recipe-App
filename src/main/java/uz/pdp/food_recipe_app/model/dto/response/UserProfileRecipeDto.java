@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 @Builder
 public class UserProfileRecipeDto {
+
     private Long id;
     private String name;
     private Short cookingTime;

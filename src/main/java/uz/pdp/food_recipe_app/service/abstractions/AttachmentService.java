@@ -8,4 +8,5 @@ public interface AttachmentService {
     Long upload(MultipartFile file);
 
     void get(Long attachmentId, HttpServletResponse response);
+
 }
