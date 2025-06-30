@@ -40,12 +40,11 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = byId.get();
-
         String name = user.getName();
         String bio = user.getBio();
 //        Long photoId = user.getAttachment().getId();
         Long photoId = 1L;
-        List<Food> recipes = foodService.getFoodByUserId(userId);
+        List<Food> recipes = foodRepository.getFoodByUserId(userId);
         Integer followersAmount = followService.findFollowersById(userId);
         Integer followingsAmount = followService.findFollowingsById(userId);
         return new UserProfileDto(name, photoId, bio, followersAmount, followingsAmount, recipes.size());
@@ -60,5 +59,4 @@ public class UserServiceImpl implements UserService {
 
         return UserProfileRecipeDto.toDTOS(userAllFood);
     }
-
 }
