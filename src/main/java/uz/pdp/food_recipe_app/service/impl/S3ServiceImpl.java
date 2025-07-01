@@ -56,4 +56,5 @@ public class S3ServiceImpl implements S3Service {
             return inputStream.readAllBytes();
         }
     }
+
 }

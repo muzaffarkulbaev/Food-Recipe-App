@@ -4,6 +4,9 @@ import lombok.Value;
 
 @Value
 public class IngredientDto {
+
     String name;
+
     Integer quantity;
+
 }

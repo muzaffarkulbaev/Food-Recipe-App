@@ -10,7 +10,9 @@ import java.util.List;
 public interface UserService {
 
     UserDto getUserById(Long userId);
+
     UserProfileDto getUserProfileData(Long userId);
 
     List<UserProfileRecipeDto> getUserProfileRecipesDataById(Long id);
+
 }

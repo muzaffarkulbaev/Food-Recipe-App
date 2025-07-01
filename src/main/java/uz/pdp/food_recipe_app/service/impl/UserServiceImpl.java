@@ -60,4 +60,5 @@ public class UserServiceImpl implements UserService {
 
         return UserProfileRecipeDto.toDTOS(userAllFood);
     }
+
 }

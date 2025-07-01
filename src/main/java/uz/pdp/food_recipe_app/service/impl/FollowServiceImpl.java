@@ -33,7 +33,6 @@ public class FollowServiceImpl implements FollowService {
 
         Optional<Follow> followOptional = followRepository.findByFollowerIdAndUserId(followerId, userId);
 
-
         if (followOptional.isPresent()) {
             followRepository.delete(followOptional.get()); // Unfollow
         } else {
@@ -42,6 +41,7 @@ public class FollowServiceImpl implements FollowService {
             follow.setUser(userRepository.findById(userId).orElseThrow());
             followRepository.save(follow);
         }
+
     }
 
 }

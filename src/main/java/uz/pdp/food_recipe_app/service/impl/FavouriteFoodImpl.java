@@ -11,16 +11,12 @@ import uz.pdp.food_recipe_app.repo.FoodRepository;
 import uz.pdp.food_recipe_app.service.abstractions.FavouriteFoodService;
 
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
 public class FavouriteFoodImpl implements FavouriteFoodService {
     private final FavouriteFoodRepository favouriteFoodRepository;
     private final FoodRepository foodRepository;
-
 
     @Override
     public void favouriteFood(FavouriteFoodDto favouriteFoodDto) {

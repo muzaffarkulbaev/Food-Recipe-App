@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface FavouriteFoodRepository extends JpaRepository<FavouriteFood, Long> {
+
     FavouriteFood findByFoodId(Long foodId);
 
     List<FavouriteFoodDto> findByUserId(Long userId);

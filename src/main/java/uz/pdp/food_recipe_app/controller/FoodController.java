@@ -4,13 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.pdp.food_recipe_app.model.dto.request.FavouriteFoodDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
-import uz.pdp.food_recipe_app.service.abstractions.FavouriteFoodService;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
-
 
 import java.util.List;
 
@@ -37,9 +34,10 @@ public class FoodController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addNewFood(@RequestBody FoodAddDto foodAddDto) {
+    public ResponseEntity<?> addNewFood(@RequestBody FoodAddDto foodAddDto,
+                                        @RequestBody List<String> procedureList) {
         try {
-            foodService.addNewFood(foodAddDto);
+            foodService.addNewFood(foodAddDto, procedureList);
             return ResponseEntity.ok("Food successfully added");
         } catch (Exception ex) {
             return ResponseEntity
@@ -47,5 +45,8 @@ public class FoodController {
                     .body(ex.getMessage());
         }
     }
-
+    @GetMapping("procedure/{foodId}")
+    public ResponseEntity<?> getFoodByProcedure(@PathVariable Long foodId) {
+        return ResponseEntity.ok(foodService.getFoodProcedures(foodId));
+    }
 }

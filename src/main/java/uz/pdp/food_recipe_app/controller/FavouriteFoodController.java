@@ -1,7 +1,6 @@
 package uz.pdp.food_recipe_app.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.food_recipe_app.model.dto.request.FavouriteFoodDto;
@@ -13,7 +12,6 @@ import uz.pdp.food_recipe_app.service.abstractions.FavouriteFoodService;
 public class FavouriteFoodController {
 
     private final FavouriteFoodService favouriteFoodService;
-
 
     @PostMapping("/add")
     public ResponseEntity<?> favouriteFood(@RequestBody FavouriteFoodDto favouriteFoodDto) {
