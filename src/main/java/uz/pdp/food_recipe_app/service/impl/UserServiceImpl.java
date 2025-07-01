@@ -38,14 +38,12 @@ public class UserServiceImpl implements UserService {
         if (byId.isEmpty()) {
             throw new RuntimeException("User not found");
         }
-
         User user = byId.get();
-
         String name = user.getName();
         String bio = user.getBio();
 //        Long photoId = user.getAttachment().getId();
         Long photoId = 1L;
-        List<Food> recipes = foodService.getFoodByUserId(userId);
+        List<Food> recipes = foodRepository.getFoodByUserId(userId);
         Integer followersAmount = followService.findFollowersById(userId);
         Integer followingsAmount = followService.findFollowingsById(userId);
         return new UserProfileDto(name, photoId, bio, followersAmount, followingsAmount, recipes.size());
@@ -57,7 +55,6 @@ public class UserServiceImpl implements UserService {
         if (userAllFood.isEmpty()) {
             throw new RuntimeException("Food not found");
         }
-
         return UserProfileRecipeDto.toDTOS(userAllFood);
     }
 
