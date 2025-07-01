@@ -34,14 +34,19 @@ public class FoodController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addNewFood(@RequestBody FoodAddDto foodAddDto) {
+    public ResponseEntity<?> addNewFood(@RequestBody FoodAddDto foodAddDto,
+                                        @RequestBody List<String> procedureList) {
         try {
-            foodService.addNewFood(foodAddDto);
+            foodService.addNewFood(foodAddDto, procedureList);
             return ResponseEntity.ok("Food successfully added");
         } catch (Exception ex) {
             return ResponseEntity
                     .badRequest()
                     .body(ex.getMessage());
         }
+    }
+    @GetMapping("procedure/{foodId}")
+    public ResponseEntity<?> getFoodByProcedure(@PathVariable Long foodId) {
+        return ResponseEntity.ok(foodService.getFoodProcedures(foodId));
     }
 }

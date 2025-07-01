@@ -6,14 +6,8 @@ import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
-import uz.pdp.food_recipe_app.model.entity.Food;
-import uz.pdp.food_recipe_app.model.entity.FoodIngredient;
-import uz.pdp.food_recipe_app.model.entity.Ingredient;
-import uz.pdp.food_recipe_app.model.entity.User;
-import uz.pdp.food_recipe_app.repo.FoodIngredientRepository;
-import uz.pdp.food_recipe_app.repo.FoodRepository;
-import uz.pdp.food_recipe_app.repo.IngredientRepository;
-import uz.pdp.food_recipe_app.repo.UserRepository;
+import uz.pdp.food_recipe_app.model.entity.*;
+import uz.pdp.food_recipe_app.repo.*;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
 import java.util.List;
@@ -26,6 +20,7 @@ public class FoodServiceImpl implements FoodService {
     private final IngredientRepository ingredientRepository;
     private final FoodIngredientRepository foodIngredientRepository;
     private final UserRepository userRepository;
+    private final ProcedureRepository procedureRepository;
 
     @Override
     public List<FoodByCategoryDto> getAllFoods() {
@@ -69,15 +64,27 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public void addNewFood(FoodAddDto foodAddDto) {
+    public void addNewFood(FoodAddDto foodAddDto, List<String> procedureList) {
         User newFoodUser = userRepository.findById(foodAddDto.getUserId()).orElse(null);
         Food newFood = Food.builder()
                 .name(foodAddDto.getName())
-                .description(foodAddDto.getDescription())
                 .cookingTime(foodAddDto.getCookingTime())
                 .user(newFoodUser)
                 .build();
         foodRepository.save(newFood);
+
+        Long foodIdForDesc = newFood.getId();
+
+        short step = 1;
+        for (String string : procedureList) {
+            Procedure procedure = Procedure.builder()
+                    .description(string)
+                    .foodId(foodIdForDesc)
+                    .step(step)
+                    .build();
+            procedureRepository.save(procedure);
+            step++;
+        }
 
 
         foodAddDto.getIngredients().forEach(ingredient -> {
@@ -105,6 +112,11 @@ public class FoodServiceImpl implements FoodService {
                 foodIngredientRepository.save(foodIngredient);
             }
         });
+    }
+
+    @Override
+    public List<Procedure> getFoodProcedures(Long foodId) {
+        return procedureRepository.getAllProceduresByFoodId(foodId);
     }
 
     @Override
