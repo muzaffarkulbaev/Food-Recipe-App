@@ -7,5 +7,5 @@ import uz.pdp.food_recipe_app.model.entity.User;
 
 public interface AuthService {
     User login(LoginDto loginDto);
-    void register(RegisterDto registerDto, MultipartFile photo);
+    void register(RegisterDto registerDto);
 }

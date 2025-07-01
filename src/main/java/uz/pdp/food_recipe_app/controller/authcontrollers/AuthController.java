@@ -33,10 +33,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestPart("data") RegisterDto registerDto,
-                                      @RequestPart("photo") MultipartFile photo) {
+    public ResponseEntity<?> register(@RequestPart("data") RegisterDto registerDto) {
         try {
-            authService.register(registerDto,photo);
+            authService.register(registerDto);
             return ResponseEntity.ok("User successfully registered");
         } catch (Exception ex) {
             return ResponseEntity

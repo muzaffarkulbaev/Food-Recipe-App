@@ -33,17 +33,19 @@ public class AuthServiceImpl implements AuthService {
 
     @SneakyThrows
     @Override
-    public void register(RegisterDto registerDto, MultipartFile photo) {
+    public void register(RegisterDto registerDto) {
 
         if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
             throw new BadRequestException("Passwords do not match");
         }
 
-        String url = s3Service.uploadImage(photo);
+//        String url = s3Service.uploadImage(photo);
+//        Attachment attachment = new Attachment();
+//        attachment.setUrl(url);
+//        Attachment savedAttachment = attachmentRepository.save(attachment);
+//        System.out.println("savedAttachment.getId() = " + savedAttachment.getId());
         Attachment attachment = new Attachment();
-        attachment.setUrl(url);
         Attachment savedAttachment = attachmentRepository.save(attachment);
-        System.out.println("savedAttachment.getId() = " + savedAttachment.getId());
 
         User user = User.builder()
                 .email(registerDto.getEmail())
