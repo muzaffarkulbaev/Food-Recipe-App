@@ -105,12 +105,7 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<Food> getFoodByUserId(Long userId) {
-        return List.of();
-    }
-
-    @Override
-    public List<Food> getFoodByUserId(Long userId) {
-        return List.of();
+        return foodRepository.findByUserId(userId);
     }
 
 
