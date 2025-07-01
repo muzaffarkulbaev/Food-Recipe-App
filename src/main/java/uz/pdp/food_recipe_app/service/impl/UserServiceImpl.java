@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService {
         if (byId.isEmpty()) {
             throw new RuntimeException("User not found");
         }
-
         User user = byId.get();
         String name = user.getName();
         String bio = user.getBio();
@@ -56,7 +55,7 @@ public class UserServiceImpl implements UserService {
         if (userAllFood.isEmpty()) {
             throw new RuntimeException("Food not found");
         }
-
         return UserProfileRecipeDto.toDTOS(userAllFood);
     }
+
 }
