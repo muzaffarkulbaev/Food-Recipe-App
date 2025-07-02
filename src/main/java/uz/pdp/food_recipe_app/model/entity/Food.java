@@ -17,6 +17,7 @@ public class Food extends BaseEntity {
 
     private String name;
     private Short cookingTime;
+    private Float rating;
 
     @ManyToOne
     private Attachment attachment;

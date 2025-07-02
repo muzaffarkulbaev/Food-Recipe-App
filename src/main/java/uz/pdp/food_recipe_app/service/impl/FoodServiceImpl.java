@@ -8,7 +8,6 @@ import uz.pdp.food_recipe_app.model.dto.request.FilterDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodResponceDto;
-import uz.pdp.food_recipe_app.model.dto.response.FoodSearchDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.model.entity.*;
 import uz.pdp.food_recipe_app.model.enums.TimeStatus;
