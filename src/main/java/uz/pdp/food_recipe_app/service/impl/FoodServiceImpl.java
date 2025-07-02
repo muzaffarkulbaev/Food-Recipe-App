@@ -10,7 +10,6 @@ import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodResponceDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.model.entity.*;
-import uz.pdp.food_recipe_app.model.enums.TimeStatus;
 import uz.pdp.food_recipe_app.repo.*;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
@@ -57,6 +56,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public List<NewFoodsListDto> getNewFoods() {
         List<Food> newFoods = foodRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+
         return newFoods.stream()
                 .limit(10)
                 .map(food -> new NewFoodsListDto(
@@ -127,11 +127,6 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<Food> getFoodByUserId(Long userId) {
-        return foodRepository.findByUserId(userId);
-    }
-
-    @Override
     public List<FoodResponceDto> getSearchedFoods(String search) {
 
         String[] keywords = search.trim().split("\\s+");
@@ -143,7 +138,7 @@ public class FoodServiceImpl implements FoodService {
         }
 
         return searchFoods.stream()
-//                .sorted(Comparator.comparing(Food::getRating).reversed())
+                .sorted(Comparator.comparing(Food::getRating).reversed())
                 .map(food -> new FoodResponceDto(
                         food.getName(),
                         food.getUser().getName(),
@@ -155,7 +150,37 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<FoodResponceDto> getFoodsByFilter(FilterDto filterDto) {
-        return List.of();
+
+        List<Food> foods = foodRepository.findByCategoryId(filterDto.getCategoryId());
+
+        String time = filterDto.getTime();
+
+        foods = switch (time){
+            case "ALL" -> foods;
+            case "NEWEST" -> foods.stream()
+                    .filter(food -> food.getCreatedAt() != null)
+                    .sorted(Comparator.comparing(Food::getCreatedAt).reversed())
+                    .toList();
+            case "OLDEST" -> foods.stream()
+                    .filter(food -> food.getCreatedAt() != null)
+                    .sorted(Comparator.comparing(Food::getCreatedAt))
+                    .toList();
+            case "POPULARITY" -> foods.stream().sorted(Comparator.comparing(Food::getViewAmount).reversed()).limit(10).toList();
+            default -> throw new IllegalArgumentException("Unknown filter time: " + time);
+        };
+
+        return foods.stream().filter(food ->
+                    filterDto.getRating() == null ||
+                        food.getRating() >= filterDto.getRating()
+                )
+                .map(food ->
+                new FoodResponceDto(
+                        food.getName(),
+                        food.getUser().getName(),
+                        food.getRating(),
+                        food.getAttachment().getUrl()
+                )
+        ).toList();
     }
 
 
