@@ -1,17 +1,25 @@
 package uz.pdp.food_recipe_app.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import uz.pdp.food_recipe_app.model.dto.request.FilterDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
+import uz.pdp.food_recipe_app.model.dto.response.FoodResponceDto;
+import uz.pdp.food_recipe_app.model.dto.response.FoodSearchDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.model.entity.*;
+import uz.pdp.food_recipe_app.model.enums.TimeStatus;
 import uz.pdp.food_recipe_app.repo.*;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class FoodServiceImpl implements FoodService {
@@ -122,6 +130,33 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public List<Food> getFoodByUserId(Long userId) {
         return foodRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<FoodResponceDto> getSearchedFoods(String search) {
+
+        String[] keywords = search.trim().split("\\s+");
+
+        HashSet<Food> searchFoods = new HashSet<>();
+
+        for (String keyword : keywords) {
+            searchFoods.addAll(foodRepository.findByNameLike(keyword));
+        }
+
+        return searchFoods.stream()
+//                .sorted(Comparator.comparing(Food::getRating).reversed())
+                .map(food -> new FoodResponceDto(
+                        food.getName(),
+                        food.getUser().getName(),
+                        0f,
+//                        food.getRating(),
+                        food.getAttachment().getUrl()))
+                .toList();
+    }
+
+    @Override
+    public List<FoodResponceDto> getFoodsByFilter(FilterDto filterDto) {
+        return List.of();
     }
 
 
