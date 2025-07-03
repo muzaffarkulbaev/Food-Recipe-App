@@ -1,17 +1,23 @@
 package uz.pdp.food_recipe_app.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import uz.pdp.food_recipe_app.model.dto.request.FilterDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
+import uz.pdp.food_recipe_app.model.dto.response.FoodResponceDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.model.entity.*;
 import uz.pdp.food_recipe_app.repo.*;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class FoodServiceImpl implements FoodService {
@@ -50,6 +56,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public List<NewFoodsListDto> getNewFoods() {
         List<Food> newFoods = foodRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+
         return newFoods.stream()
                 .limit(10)
                 .map(food -> new NewFoodsListDto(
@@ -119,6 +126,62 @@ public class FoodServiceImpl implements FoodService {
         return procedureRepository.getAllProceduresByFoodId(foodId);
     }
 
+    @Override
+    public List<FoodResponceDto> getSearchedFoods(String search) {
+
+        String[] keywords = search.trim().split("\\s+");
+
+        HashSet<Food> searchFoods = new HashSet<>();
+
+        for (String keyword : keywords) {
+            searchFoods.addAll(foodRepository.findByNameLike(keyword));
+        }
+
+        return searchFoods.stream()
+                .sorted(Comparator.comparing(Food::getRating).reversed())
+                .map(food -> new FoodResponceDto(
+                        food.getName(),
+                        food.getUser().getName(),
+                        0f,
+//                        food.getRating(),
+                        food.getAttachment().getUrl()))
+                .toList();
+    }
+
+    @Override
+    public List<FoodResponceDto> getFoodsByFilter(FilterDto filterDto) {
+
+        List<Food> foods = foodRepository.findByCategoryId(filterDto.getCategoryId());
+
+        String time = filterDto.getTime();
+
+        foods = switch (time){
+            case "ALL" -> foods;
+            case "NEWEST" -> foods.stream()
+                    .filter(food -> food.getCreatedAt() != null)
+                    .sorted(Comparator.comparing(Food::getCreatedAt).reversed())
+                    .toList();
+            case "OLDEST" -> foods.stream()
+                    .filter(food -> food.getCreatedAt() != null)
+                    .sorted(Comparator.comparing(Food::getCreatedAt))
+                    .toList();
+            case "POPULARITY" -> foods.stream().sorted(Comparator.comparing(Food::getViewAmount).reversed()).limit(10).toList();
+            default -> throw new IllegalArgumentException("Unknown filter time: " + time);
+        };
+
+        return foods.stream().filter(food ->
+                    filterDto.getRating() == null ||
+                        food.getRating() >= filterDto.getRating()
+                )
+                .map(food ->
+                new FoodResponceDto(
+                        food.getName(),
+                        food.getUser().getName(),
+                        food.getRating(),
+                        food.getAttachment().getUrl()
+                )
+        ).toList();
+    }
 
 
 //    @Override
