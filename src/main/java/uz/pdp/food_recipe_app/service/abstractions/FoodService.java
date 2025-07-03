@@ -21,5 +21,4 @@ public interface FoodService {
 
     List<Procedure> getFoodProcedures(Long foodId);
 
-    List<Food> getFoodByUserId(Long userId);
 }

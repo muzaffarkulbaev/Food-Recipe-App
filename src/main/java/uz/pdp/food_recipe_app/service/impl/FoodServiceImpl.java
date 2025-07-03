@@ -119,10 +119,6 @@ public class FoodServiceImpl implements FoodService {
         return procedureRepository.getAllProceduresByFoodId(foodId);
     }
 
-    @Override
-    public List<Food> getFoodByUserId(Long userId) {
-        return List.of();
-    }
 
 
 //    @Override

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
+import uz.pdp.food_recipe_app.model.dto.request.FoodWithProcedureDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
@@ -34,10 +35,9 @@ public class FoodController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addNewFood(@RequestBody FoodAddDto foodAddDto,
-                                        @RequestBody List<String> procedureList) {
+    public ResponseEntity<?> addNewFood(@RequestBody FoodWithProcedureDto foodWithProcedureDto) {
         try {
-            foodService.addNewFood(foodAddDto, procedureList);
+            foodService.addNewFood(foodWithProcedureDto.getFoodAddDto(), foodWithProcedureDto.getProceduresList());
             return ResponseEntity.ok("Food successfully added");
         } catch (Exception ex) {
             return ResponseEntity
