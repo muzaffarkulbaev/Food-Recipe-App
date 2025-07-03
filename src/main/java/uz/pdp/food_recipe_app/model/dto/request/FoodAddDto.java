@@ -9,8 +9,6 @@ public class FoodAddDto {
 
     String name;
 
-    String description;
-
     String imageUrl;
 
     Short cookingTime;

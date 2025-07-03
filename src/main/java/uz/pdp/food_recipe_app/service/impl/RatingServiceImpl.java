@@ -47,7 +47,7 @@ public class RatingServiceImpl implements RatingService {
 
             Float avgR = ratingCounter.getAverageRating();
             Float rA = ratingCounter.getRatingAmount();
-            Float newAvgRating = (avgR * rA + ratingDto.getRating()) / rA+1F;
+            Float newAvgRating = (avgR * rA + ratingDto.getRating()) / (rA+1F);
 
             ratingCounter.setAverageRating(newAvgRating);
             ratingCounter.setRatingAmount(rA+1F);
