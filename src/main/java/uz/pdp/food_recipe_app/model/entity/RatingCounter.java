@@ -8,14 +8,14 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import uz.pdp.food_recipe_app.model.base.BaseEntity;
 
-@Entity
 @Getter
 @Setter
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class Attachment extends BaseEntity {
-
-    private String url;
-
+public class RatingCounter extends BaseEntity {
+    Float averageRating;
+    Float ratingAmount;
+    Long foodId;
 }

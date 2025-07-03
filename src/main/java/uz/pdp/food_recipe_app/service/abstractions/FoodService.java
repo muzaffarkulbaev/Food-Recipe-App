@@ -1,10 +1,10 @@
 package uz.pdp.food_recipe_app.service.abstractions;
 
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
+import uz.pdp.food_recipe_app.model.dto.request.FilterDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
+import uz.pdp.food_recipe_app.model.dto.response.FoodResponceDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
-import uz.pdp.food_recipe_app.model.entity.Food;
 import uz.pdp.food_recipe_app.model.entity.Procedure;
 
 import java.util.List;
@@ -21,5 +21,7 @@ public interface FoodService {
 
     List<Procedure> getFoodProcedures(Long foodId);
 
-    List<Food> getFoodByUserId(Long userId);
+    List<FoodResponceDto> getSearchedFoods(String search);
+
+    List<FoodResponceDto> getFoodsByFilter(FilterDto filterDto);
 }

@@ -2,10 +2,8 @@ package uz.pdp.food_recipe_app.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.OneToOne;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import uz.pdp.food_recipe_app.model.base.BaseEntity;
 
@@ -20,6 +18,7 @@ public class Food extends BaseEntity {
     private String name;
     private Short cookingTime;
     private Float rating;
+    private Integer viewAmount;
 
     @ManyToOne
     private Attachment attachment;

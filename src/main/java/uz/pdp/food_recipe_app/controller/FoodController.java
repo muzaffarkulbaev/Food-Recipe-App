@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uz.pdp.food_recipe_app.model.dto.request.FilterDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
+import uz.pdp.food_recipe_app.model.dto.response.FoodResponceDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
 
@@ -38,6 +40,7 @@ public class FoodController {
                                         @RequestBody List<String> procedureList) {
         try {
             foodService.addNewFood(foodAddDto, procedureList);
+
             return ResponseEntity.ok("Food successfully added");
         } catch (Exception ex) {
             return ResponseEntity
@@ -45,8 +48,22 @@ public class FoodController {
                     .body(ex.getMessage());
         }
     }
+
     @GetMapping("procedure/{foodId}")
     public ResponseEntity<?> getFoodByProcedure(@PathVariable Long foodId) {
         return ResponseEntity.ok(foodService.getFoodProcedures(foodId));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<FoodResponceDto>> getSearchedFoods(@RequestParam String search) {
+        return ResponseEntity.ok(foodService.getSearchedFoods(search));
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<FoodResponceDto>> getFoodsByFilter(@RequestBody FilterDto filterDto) {
+        return ResponseEntity.ok(foodService.getFoodsByFilter(filterDto));
+    }
+
+
+
 }
