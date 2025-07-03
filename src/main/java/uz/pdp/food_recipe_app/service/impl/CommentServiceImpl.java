@@ -1,12 +1,16 @@
 package uz.pdp.food_recipe_app.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.model.dto.request.CommentRequestDto;
+import uz.pdp.food_recipe_app.model.dto.request.ReactionDto;
 import uz.pdp.food_recipe_app.model.dto.response.CommentResponseDto;
 import uz.pdp.food_recipe_app.model.entity.Comment;
+import uz.pdp.food_recipe_app.model.entity.CommentReaction;
 import uz.pdp.food_recipe_app.model.entity.Food;
 import uz.pdp.food_recipe_app.model.entity.User;
+import uz.pdp.food_recipe_app.model.enums.ReactionStatus;
 import uz.pdp.food_recipe_app.repo.CommentReactionRepository;
 import uz.pdp.food_recipe_app.repo.CommentRepository;
 import uz.pdp.food_recipe_app.repo.FoodRepository;
@@ -15,6 +19,9 @@ import uz.pdp.food_recipe_app.service.abstractions.CommentService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+
+@Transactional
 
 @Service
 @RequiredArgsConstructor
@@ -58,10 +65,58 @@ public class CommentServiceImpl implements CommentService {
                 comment.getText(),
                 comment.getCreatedAt(),
                 user.getAttachment().getUrl() != null ? user.getAttachment().getUrl() : null,
-                0,
-                0
-//                comment.getCommentReaction().getLikeAmount(),
-//                comment.getCommentReaction().getDislikeAmount()
+                commentReactionRepository.getCommentReactionByCommentIdLike(comment.getId()),
+                commentReactionRepository.getCommentReactionByCommentIdDislike(comment.getId())
         );
+    }
+
+    @Override
+    public String reactionProcess(ReactionDto reactionDto) {
+        String reaction = reactionDto.getReaction();
+        return switch (reaction){
+            case "LIKE" -> reactionLike(reactionDto);
+            case "DISLIKE" -> reactionDislike(reactionDto);
+            default -> "Reaction status is invalid";
+        };
+    }
+
+    private String reactionLike(ReactionDto reactionDto) {
+        CommentReaction commentReaction = commentReactionRepository.findByCommentIdAndUserId(reactionDto.getCommentId(), reactionDto.getUserId());
+        if (commentReaction == null){
+            CommentReaction newCommentReaction = new CommentReaction();
+            newCommentReaction.setUser(userRepository.findById(reactionDto.getUserId()).orElseThrow());
+            newCommentReaction.setComment(commentRepository.findById(reactionDto.getCommentId()).orElseThrow());
+            newCommentReaction.setReactionStatus(ReactionStatus.LIKE);
+            commentReactionRepository.save(newCommentReaction);
+            return "Like is clicked";
+        }
+        if (Objects.equals(commentReaction.getReactionStatus(),ReactionStatus.LIKE)){
+            commentReactionRepository.delete(commentReaction);
+            return "Like is deleted";
+        }else {
+            commentReaction.setReactionStatus(ReactionStatus.LIKE);
+            return "Dislike changed to like";
+        }
+    }
+
+    private String reactionDislike(ReactionDto reactionDto) {
+        CommentReaction commentReaction = commentReactionRepository.findByCommentIdAndUserId(reactionDto.getCommentId(), reactionDto.getUserId());
+
+        if (commentReaction == null){
+            CommentReaction newCommentReaction = new CommentReaction();
+            newCommentReaction.setUser(userRepository.findById(reactionDto.getUserId()).orElseThrow());
+            newCommentReaction.setComment(commentRepository.findById(reactionDto.getCommentId()).orElseThrow());
+            newCommentReaction.setReactionStatus(ReactionStatus.DISLIKE);
+            commentReactionRepository.save(newCommentReaction);
+            return "Dislike is clicked";
+        }
+
+        if (Objects.equals(commentReaction.getReactionStatus(),ReactionStatus.DISLIKE)){
+            commentReactionRepository.delete(commentReaction);
+            return "Dislike is deleted";
+        }else {
+            commentReaction.setReactionStatus(ReactionStatus.DISLIKE);
+            return "Like changed to dislike";
+        }
     }
 }

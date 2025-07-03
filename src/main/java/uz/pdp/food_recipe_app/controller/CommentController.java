@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.food_recipe_app.model.dto.request.CommentRequestDto;
+import uz.pdp.food_recipe_app.model.dto.request.ReactionDto;
 import uz.pdp.food_recipe_app.model.dto.response.CommentResponseDto;
 import uz.pdp.food_recipe_app.service.abstractions.CommentService;
 
@@ -28,6 +29,12 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> addCommentToFood(@RequestBody CommentRequestDto requestDto){
         CommentResponseDto comment = commentService.addCommentToFood(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
+    }
+
+    @PostMapping("/reaction")
+    public ResponseEntity<String> reactionProcess(@RequestBody ReactionDto reactionDto){
+        String message = commentService.reactionProcess(reactionDto);
+        return ResponseEntity.ok(message);
     }
 }
 
