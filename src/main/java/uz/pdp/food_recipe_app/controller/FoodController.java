@@ -10,6 +10,7 @@ import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodResponceDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.service.abstractions.FoodService;
+import uz.pdp.food_recipe_app.service.abstractions.NotificationService;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class FoodController {
 
     private final FoodService foodService;
+    private final NotificationService notificationService;
 
     @GetMapping("/new")
     public ResponseEntity<List<NewFoodsListDto>> getNewFoods() {
@@ -40,7 +42,7 @@ public class FoodController {
                                         @RequestBody List<String> procedureList) {
         try {
             foodService.addNewFood(foodAddDto, procedureList);
-
+            notificationService.createAndSendToUsers(foodAddDto);
             return ResponseEntity.ok("Food successfully added");
         } catch (Exception ex) {
             return ResponseEntity
