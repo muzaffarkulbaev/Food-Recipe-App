@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.pdp.food_recipe_app.model.dto.request.LoginDto;
 import uz.pdp.food_recipe_app.model.dto.request.RegisterDto;
+import uz.pdp.food_recipe_app.model.dto.response.LoginResponse;
 import uz.pdp.food_recipe_app.model.entity.User;
 import uz.pdp.food_recipe_app.repo.UserRepository;
 import uz.pdp.food_recipe_app.service.abstractions.AuthService;
@@ -16,24 +17,11 @@ import uz.pdp.food_recipe_app.service.abstractions.AuthService;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserRepository userRepository;
     private final AuthService authService;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
-        System.out.println("logging is started");
-        User user = authService.login(loginDto);
-        if (user == null) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid email or password");
-        }
-        System.out.println("successfully logged in");
-        return ResponseEntity.ok(user);
-    }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestPart("data") RegisterDto registerDto) {
+    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
         try {
             authService.register(registerDto);
             return ResponseEntity.ok("User successfully registered");
@@ -43,6 +31,13 @@ public class AuthController {
                     .body(ex.getMessage());
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+        System.out.println("logging is started");
+        return ResponseEntity.ok(authService.login(loginDto));
+    }
+
     /*@GetMapping("/google")
     public String googleLogin(@RequestParam String code) {
         RestTemplate restTemplate = new RestTemplate();

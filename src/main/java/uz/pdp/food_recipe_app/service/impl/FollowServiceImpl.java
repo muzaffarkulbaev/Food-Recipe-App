@@ -3,10 +3,12 @@ package uz.pdp.food_recipe_app.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.model.entity.Follow;
+import uz.pdp.food_recipe_app.model.entity.User;
 import uz.pdp.food_recipe_app.repo.FollowRepository;
 import uz.pdp.food_recipe_app.repo.UserRepository;
 import uz.pdp.food_recipe_app.service.abstractions.FollowService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,6 +44,11 @@ public class FollowServiceImpl implements FollowService {
             followRepository.save(follow);
         }
 
+    }
+
+    @Override
+    public List<User> findFollowers(Long userId) {
+        return followRepository.findFollowersByUserId(userId);
     }
 
 }
