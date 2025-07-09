@@ -42,6 +42,7 @@ public class FoodController {
     public ResponseEntity<?> addNewFood(@RequestBody FoodWithProcedureDto foodWithProcedureDto) {
         try {
             foodService.addNewFood(foodWithProcedureDto.getFoodAddDto(), foodWithProcedureDto.getProceduresList());
+            FoodAddDto foodAddDto = foodWithProcedureDto.getFoodAddDto();
             notificationService.createAndSendToUsers(foodAddDto);
             return ResponseEntity.ok("Food successfully added");
         } catch (Exception ex) {
