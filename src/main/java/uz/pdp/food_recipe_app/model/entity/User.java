@@ -1,13 +1,15 @@
 package uz.pdp.food_recipe_app.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import uz.pdp.food_recipe_app.model.base.BaseEntity;
-import uz.pdp.food_recipe_app.model.enums.Role;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,8 +17,9 @@ import uz.pdp.food_recipe_app.model.enums.Role;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@Builder
 @Table(name = "users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
     @Column(nullable = false)
     private String name;
@@ -32,7 +35,22 @@ public class User extends BaseEntity {
     @ManyToOne
     private Attachment attachment;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles = new ArrayList<>();
 
+    public User(String email, List<Role> authorities) {
+        this.email = email;
+        this.roles = authorities;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
 }
