@@ -19,11 +19,6 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
-        System.out.println("logging is started");
-        return ResponseEntity.ok(authService.login(loginDto));
-    }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
@@ -36,6 +31,13 @@ public class AuthController {
                     .body(ex.getMessage());
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+        System.out.println("logging is started");
+        return ResponseEntity.ok(authService.login(loginDto));
+    }
+
     /*@GetMapping("/google")
     public String googleLogin(@RequestParam String code) {
         RestTemplate restTemplate = new RestTemplate();
