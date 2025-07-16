@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Add Food</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body class="p-4" style="margin-bottom: 90px;">
+
+<h3>Добавление еды</h3>
+
+<form id="foodForm">
+
+    <input type="text" class="form-control mb-2" placeholder="Название блюда" id="name" required />
+
+    <label class="form-label">Категория:</label>
+    <select id="categorySelect" class="form-select mb-3" required>
+        <option value="" disabled selected>Выберите категорию</option>
+    </select>
+
+
+    <label class="form-label">Фото:</label>
+    <input type="file" class="form-control mb-2" id="foodImage" accept="image/*" />
+    <button type="button" class="btn btn-secondary mb-3" onclick="uploadImage()">Загрузить фото</button>
+    <div id="uploadStatus" class="text-success mb-2" style="display:none;">Загружено. ID фото: <span id="photoIdSpan"></span></div>
+
+    <input type="number" class="form-control mb-2" placeholder="Время готовки (мин)" id="cookingTime" required />
+
+    <h5>Ингредиенты</h5>
+    <div id="ingredientsContainer" class="mb-3"></div>
+    <button type="button" class="btn btn-outline-primary mb-3" onclick="addIngredientRow()">Добавить ингредиент</button>
+
+    <h5>Процедура</h5>
+    <div class="mb-3">
+        <input type="text" id="procedureInput" class="form-control mb-2" placeholder="Введите шаг и нажмите 'Добавить шаг'" />
+        <button type="button" class="btn btn-outline-secondary" onclick="addProcedure()">Добавить шаг</button>
+        <ul id="proceduresList" class="mt-2 list-group"></ul>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Добавить еду</button>
+</form>
+
+<!-- 🔽 Нижняя навигационная панель -->
+<nav class="navbar fixed-bottom bg-white border-top shadow-sm">
+    <div class="container-fluid d-flex justify-content-around py-1">
+
+        <a href="/htmls/home.html" class="text-center text-decoration-none text-dark">
+            <div><i class="bi bi-house-door-fill fs-4"></i></div>
+        </a>
+
+        <a href="/htmls/favourites.html" class="text-center text-decoration-none text-dark">
+            <div><i class="bi bi-heart-fill fs-4"></i></div>
+        </a>
+
+        <a href="/htmls/add-food.html" class="text-center text-decoration-none text-primary">
+            <div><i class="bi bi-plus-circle-fill fs-3"></i></div>
+        </a>
+
+        <a href="/htmls/notifications.html" class="text-center text-decoration-none text-dark">
+            <div><i class="bi bi-bell-fill fs-4"></i></div>
+        </a>
+
+        <a href="/htmls/profile.html" class="text-center text-decoration-none text-dark">
+            <div><i class="bi bi-person-circle fs-4"></i></div>
+        </a>
+
+    </div>
+</nav>
+
+
+<script>
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    let photoId = null;
+    let allIngredients = [];
+
+    async function fetchIngredients() {
+        try {
+            const res = await axios.get("/api/ingredient/all", {
+                headers: { Authorization: token }
+            });
+            allIngredients = res.data;
+            addIngredientRow(); // добавим первый по умолчанию
+        } catch (e) {
+            alert("Не удалось загрузить ингредиенты");
+        }
+    }
+
+    async function fetchCategories() {
+        try {
+            const res = await axios.get("/api/category/all", {
+                headers: { Authorization: token }
+            });
+
+            const categories = res.data;
+            const categorySelect = document.getElementById("categorySelect");
+
+            categories.forEach(cat => {
+                const option = document.createElement("option");
+                option.value = cat.id;
+                option.textContent = cat.name;
+                categorySelect.appendChild(option);
+            });
+
+        } catch (e) {
+            alert("Не удалось загрузить категории");
+        }
+    }
+
+
+    function addIngredientRow() {
+        const container = document.getElementById("ingredientsContainer");
+        const row = document.createElement("div");
+        row.className = "d-flex mb-2 gap-2";
+
+        const select = document.createElement("select");
+        select.className = "form-select";
+        select.required = true;
+
+        allIngredients.forEach(ingredient => {
+            const option = document.createElement("option");
+            option.value = ingredient;
+            option.textContent = ingredient;
+            select.appendChild(option);
+        });
+
+        const gramsInput = document.createElement("input");
+        gramsInput.type = "number";
+        gramsInput.placeholder = "грамм";
+        gramsInput.className = "form-control";
+        gramsInput.required = true;
+
+        row.appendChild(select);
+        row.appendChild(gramsInput);
+        container.appendChild(row);
+    }
+
+    function addProcedure() {
+        const input = document.getElementById("procedureInput");
+        const value = input.value.trim();
+        if (!value) return;
+
+        const li = document.createElement("li");
+        li.className = "list-group-item";
+        li.textContent = value;
+        document.getElementById("proceduresList").appendChild(li);
+        input.value = "";
+    }
+
+    async function uploadImage() {
+        const fileInput = document.getElementById("foodImage");
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert("Выберите фото.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await axios.post("/api/file", formData, {
+                headers: {
+                    Authorization: token,
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+
+            photoId = res.data;
+            document.getElementById("uploadStatus").style.display = "block";
+            document.getElementById("photoIdSpan").textContent = photoId;
+        } catch (err) {
+            alert("Ошибка загрузки изображения");
+        }
+    }
+
+    document.getElementById("foodForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const cookingTime = parseInt(document.getElementById("cookingTime").value);
+
+        const ingredientRows = document.getElementById("ingredientsContainer").children;
+        const ingredients = Array.from(ingredientRows).map(row => {
+            const select = row.querySelector("select");
+            const grams = row.querySelector("input").value;
+            return {
+                name: select.value,
+                amount: parseInt(grams)
+            };
+        });
+
+        const procedureItems = document.querySelectorAll("#proceduresList li");
+        const proceduresList = Array.from(procedureItems).map(li => li.textContent);
+        const categoryId = parseInt(document.getElementById("categorySelect").value);
+
+        const foodAddDto = {
+            name,
+            categoryId,
+            photoId: photoId,
+            cookingTime,
+            userId: parseInt(userId),
+            ingredients
+        };
+
+        const foodWithProcedureDto = {
+            foodAddDto,
+            proceduresList
+        };
+
+        try {
+            await axios.post("/api/food/add", foodWithProcedureDto, {
+                headers: {
+                    Authorization: token,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            alert("Еда добавлена!");
+            window.location.href = "/htmls/profile.html";
+        } catch (err) {
+            alert("Ошибка добавления: " + err.response?.data || err.message);
+        }
+    });
+
+    fetchIngredients();
+    fetchCategories();
+
+</script>
+</body>
+</html>

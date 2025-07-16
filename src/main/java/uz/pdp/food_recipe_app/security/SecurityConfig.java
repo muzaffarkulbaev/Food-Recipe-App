@@ -36,8 +36,9 @@ public class SecurityConfig {
                             "/v3/api-docs/**",
                             "/h2-console","/h2-console/**"
                     ).permitAll()
-//                    .requestMatchers(HttpMethod.GET,"/api/file/**").permitAll()
+                    .requestMatchers("/api/file/**").permitAll()
                     .requestMatchers("/api/auth", "/api/auth/**").permitAll()
+                    .requestMatchers( "/auth/**","/htmls/**","/images/**").permitAll()
                     .anyRequest().authenticated();
         });
         http.addFilterBefore(mySecurityFilter, UsernamePasswordAuthenticationFilter.class);

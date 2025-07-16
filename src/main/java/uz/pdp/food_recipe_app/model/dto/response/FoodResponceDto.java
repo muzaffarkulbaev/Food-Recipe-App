@@ -5,7 +5,8 @@ import lombok.Value;
 @Value
 public class FoodResponceDto {
     String name;
-    String chefName;
     Float rating;
-    String photoUrl;
+    String chefName;
+    Short cookingTime;
+    Long photoId;
 }

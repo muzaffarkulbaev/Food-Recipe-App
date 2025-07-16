@@ -9,4 +9,5 @@ public interface AttachmentService {
 
     void get(Long attachmentId, HttpServletResponse response);
 
+    void setAttachmentToUser(Long userId, Long attachmentId);
 }

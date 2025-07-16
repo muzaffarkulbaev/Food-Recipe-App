@@ -22,4 +22,10 @@ public class AttachmentController {
     public void getFile(@PathVariable Long attachmentId, HttpServletResponse response) {
         attachmentService.get(attachmentId, response);
     }
+
+    @PostMapping("/{userId}/{attachmentId}")
+    public void setAttachmentToUser(@PathVariable Long userId, @PathVariable Long attachmentId, HttpServletResponse response) {
+        attachmentService.setAttachmentToUser(userId,attachmentId);
+    }
+
 }

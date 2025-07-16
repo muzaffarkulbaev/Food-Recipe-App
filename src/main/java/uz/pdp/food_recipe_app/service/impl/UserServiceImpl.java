@@ -41,8 +41,7 @@ public class UserServiceImpl implements UserService {
         User user = byId.get();
         String name = user.getName();
         String bio = user.getBio();
-//        Long photoId = user.getAttachment().getId();
-        Long photoId = 1L;
+        Long photoId = user.getAttachment() == null ? null : user.getAttachment().getId();
         List<Food> recipes = foodRepository.findByUserId(userId);
         Integer followersAmount = followService.findFollowersById(userId);
         Integer followingsAmount = followService.findFollowingsById(userId);

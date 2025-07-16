@@ -47,10 +47,10 @@
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            const uuid = uploadResponse.data; // UUID, полученный от бэкенда
+            const id = uploadResponse.data; // UUID, полученный от бэкенда
 
             // 2. Получение изображения по UUID: GET /api/file/{uuid}
-            const imageResponse = await axios.get(`/api/file/${uuid}`, {
+            const imageResponse = await axios.get(`/api/file/${id}`, {
                 responseType: 'blob'
             });
 
