@@ -29,12 +29,12 @@ public class FoodController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<FoodByCategoryDto>> getAllFoods() {
+    public ResponseEntity<List<FoodResponceDto>> getAllFoods() {
         return new ResponseEntity<>(foodService.getAllFoods(), HttpStatus.OK);
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<List<FoodByCategoryDto>> getFoodByCategory(@PathVariable Long categoryId) {
+    public ResponseEntity<List<FoodResponceDto>> getFoodByCategory(@PathVariable Long categoryId) {
         return new ResponseEntity<>(foodService.getFoodsByCategory(categoryId), HttpStatus.OK);
     }
 
@@ -67,6 +67,9 @@ public class FoodController {
         return ResponseEntity.ok(foodService.getFoodsByFilter(filterDto));
     }
 
-
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<FoodResponceDto>> getFoodsByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(foodService.getFoodsByUserId(userId));
+    }
 
 }

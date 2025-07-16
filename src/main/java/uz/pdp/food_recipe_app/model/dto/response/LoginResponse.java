@@ -5,4 +5,6 @@ import lombok.Value;
 @Value
 public class LoginResponse {
     String token;
+    Long userId;
+    Boolean isAdmin;
 }
