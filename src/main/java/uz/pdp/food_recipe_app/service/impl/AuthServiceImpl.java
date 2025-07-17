@@ -45,7 +45,10 @@ public class AuthServiceImpl implements AuthService {
         System.out.println("authenticate.getName() = " + authenticate.getName());
         String token = jwtService.generateToken(loginDto.getEmail());
         System.out.println("token = " + token);
-        return new LoginResponse(token);
+        User user = userRepository.findByEmail(loginDto.getEmail()).orElseThrow();
+        Long userId = user.getId();
+        if (user.getRoles().get(0).getName().equals("ROLE_ADMIN")) return new LoginResponse(token,userId,true);
+        return new LoginResponse(token,userId,false);
     }
 
     @SneakyThrows

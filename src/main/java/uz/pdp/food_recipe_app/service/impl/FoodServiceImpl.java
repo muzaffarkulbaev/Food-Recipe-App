@@ -27,13 +27,16 @@ public class FoodServiceImpl implements FoodService {
     private final FoodIngredientRepository foodIngredientRepository;
     private final UserRepository userRepository;
     private final ProcedureRepository procedureRepository;
+    private final AttachmentRepository attachmentRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
-    public List<FoodByCategoryDto> getAllFoods() {
+    public List<FoodResponceDto> getAllFoods() {
         return foodRepository.findAll().stream()
-                .map(food -> new FoodByCategoryDto(
+                .map(food -> new FoodResponceDto(
                         food.getName(),
                         food.getRating(),
+                        food.getUser().getName(),
                         food.getCookingTime(),
                         food.getAttachment().getId()
                 ))
@@ -41,12 +44,13 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<FoodByCategoryDto> getFoodsByCategory(Long categoryId) {
+    public List<FoodResponceDto> getFoodsByCategory(Long categoryId) {
         List<Food> foods = foodRepository.findByCategoryId(categoryId);
         return foods.stream()
-                .map(food -> new FoodByCategoryDto(
+                .map(food -> new FoodResponceDto(
                         food.getName(),
                         food.getRating(),
+                        food.getUser().getName(),
                         food.getCookingTime(),
                         food.getAttachment().getId()
                 ))
@@ -73,10 +77,14 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public void addNewFood(FoodAddDto foodAddDto, List<String> procedureList) {
         User newFoodUser = userRepository.findById(foodAddDto.getUserId()).orElse(null);
+        Attachment attachment = attachmentRepository.findById(foodAddDto.getPhotoId()).orElseThrow();
+        Category category = categoryRepository.findById(foodAddDto.getCategoryId()).orElseThrow();
         Food newFood = Food.builder()
                 .name(foodAddDto.getName())
                 .cookingTime(foodAddDto.getCookingTime())
                 .user(newFoodUser)
+                .attachment(attachment)
+                .category(category)
                 .build();
         foodRepository.save(newFood);
 
@@ -141,10 +149,10 @@ public class FoodServiceImpl implements FoodService {
                 .sorted(Comparator.comparing(Food::getRating).reversed())
                 .map(food -> new FoodResponceDto(
                         food.getName(),
+                        food.getRating(),
                         food.getUser().getName(),
-                        0f,
-//                        food.getRating(),
-                        food.getAttachment().getUrl()))
+                        food.getCookingTime(),
+                        food.getAttachment().getId()))
                 .toList();
     }
 
@@ -176,11 +184,21 @@ public class FoodServiceImpl implements FoodService {
                 .map(food ->
                 new FoodResponceDto(
                         food.getName(),
-                        food.getUser().getName(),
                         food.getRating(),
-                        food.getAttachment().getUrl()
+                        food.getUser().getName(),
+                        food.getCookingTime(),
+                        food.getAttachment().getId()
                 )
         ).toList();
+    }
+
+    @Override
+    public List<FoodResponceDto> getFoodsByUserId(Long userId) {
+        List<Food> foodList = foodRepository.findByUserId(userId);
+        List<FoodResponceDto> responseDtos = foodList.stream()
+                .map(food -> new FoodResponceDto(food.getName(),  food.getRating(),food.getUser().getName(),food.getCookingTime(), food.getAttachment().getId()))
+                .toList();
+        return responseDtos;
     }
 
 
