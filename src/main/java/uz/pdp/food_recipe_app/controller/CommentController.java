@@ -31,6 +31,12 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<CommentResponseDto> updateComment(@RequestBody CommentRequestDto requestDto){
+        CommentResponseDto updatedComment = commentService.updateComment(requestDto);
+        return ResponseEntity.ok(updatedComment);
+    }
+
     @PostMapping("/reaction")
     public ResponseEntity<String> reactionProcess(@RequestBody ReactionDto reactionDto){
         String message = commentService.reactionProcess(reactionDto);

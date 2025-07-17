@@ -11,4 +11,6 @@ public class CommentRequestDto {
 
     Long userId;
 
+    Long commentId;
+
 }

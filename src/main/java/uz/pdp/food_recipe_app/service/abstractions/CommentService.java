@@ -8,6 +8,11 @@ import java.util.List;
 
 public interface CommentService {
     List<CommentResponseDto> getCommentsByFoodId(Long foodId);
+
     CommentResponseDto addCommentToFood(/*Long foodId,*/ CommentRequestDto dto/*, Long userId*/);
+
     String reactionProcess(ReactionDto reactionDto);
+
+    CommentResponseDto updateComment(CommentRequestDto requestDto);
+
 }

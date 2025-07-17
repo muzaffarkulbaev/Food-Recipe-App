@@ -3,9 +3,8 @@ package uz.pdp.food_recipe_app.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.pdp.food_recipe_app.model.dto.response.UserProfileRecipeDto;
-import uz.pdp.food_recipe_app.model.dto.request.UserDto;
 import uz.pdp.food_recipe_app.model.dto.response.UserProfileDto;
+import uz.pdp.food_recipe_app.model.dto.response.UserProfileRecipeDto;
 import uz.pdp.food_recipe_app.model.entity.Food;
 import uz.pdp.food_recipe_app.model.entity.User;
 import uz.pdp.food_recipe_app.repo.FoodRepository;
@@ -26,11 +25,6 @@ public class UserServiceImpl implements UserService {
     private final FoodService foodService;
     private final FollowService followService;
     private final FoodRepository foodRepository;
-
-    @Override
-    public UserDto getUserById(Long userId) {
-        return null;
-    }
 
     @Override
     public UserProfileDto getUserProfileData(Long userId) {

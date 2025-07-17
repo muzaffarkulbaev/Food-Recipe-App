@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Transactional
-
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -47,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponseDto addCommentToFood(/*Long foodId,*/ CommentRequestDto dto/*, Long userId*/) {
+    public CommentResponseDto addCommentToFood(CommentRequestDto dto) {
         Food food = foodRepository.findById(dto.getFoodId())
                 .orElseThrow(() -> new RuntimeException("Food not found"));
 
@@ -73,16 +72,38 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public String reactionProcess(ReactionDto reactionDto) {
         String reaction = reactionDto.getReaction();
-        return switch (reaction){
+        return switch (reaction) {
             case "LIKE" -> reactionLike(reactionDto);
             case "DISLIKE" -> reactionDislike(reactionDto);
             default -> "Reaction status is invalid";
         };
     }
 
+    @Override
+    public CommentResponseDto updateComment(CommentRequestDto requestDto) {
+        Comment comment = commentRepository.findById(requestDto.getCommentId())
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+
+        if (!comment.getUser().getId().equals(requestDto.getUserId())) {
+            throw new RuntimeException("You are not allowed to update this comment");
+        }
+
+        comment.setText(requestDto.getText());
+        commentRepository.save(comment);
+
+        return new CommentResponseDto(
+                comment.getUser().getName(),
+                comment.getText(),
+                comment.getCreatedAt(),
+                comment.getUser().getAttachment().getUrl(),
+                commentReactionRepository.getCommentReactionByCommentIdLike(comment.getId()),
+                commentReactionRepository.getCommentReactionByCommentIdDislike(comment.getId())
+        );
+    }
+
     private String reactionLike(ReactionDto reactionDto) {
         CommentReaction commentReaction = commentReactionRepository.findByCommentIdAndUserId(reactionDto.getCommentId(), reactionDto.getUserId());
-        if (commentReaction == null){
+        if (commentReaction == null) {
             CommentReaction newCommentReaction = new CommentReaction();
             newCommentReaction.setUser(userRepository.findById(reactionDto.getUserId()).orElseThrow());
             newCommentReaction.setComment(commentRepository.findById(reactionDto.getCommentId()).orElseThrow());
@@ -90,10 +111,10 @@ public class CommentServiceImpl implements CommentService {
             commentReactionRepository.save(newCommentReaction);
             return "Like is clicked";
         }
-        if (Objects.equals(commentReaction.getReactionStatus(),ReactionStatus.LIKE)){
+        if (Objects.equals(commentReaction.getReactionStatus(), ReactionStatus.LIKE)) {
             commentReactionRepository.delete(commentReaction);
             return "Like is deleted";
-        }else {
+        } else {
             commentReaction.setReactionStatus(ReactionStatus.LIKE);
             return "Dislike changed to like";
         }
@@ -102,7 +123,7 @@ public class CommentServiceImpl implements CommentService {
     private String reactionDislike(ReactionDto reactionDto) {
         CommentReaction commentReaction = commentReactionRepository.findByCommentIdAndUserId(reactionDto.getCommentId(), reactionDto.getUserId());
 
-        if (commentReaction == null){
+        if (commentReaction == null) {
             CommentReaction newCommentReaction = new CommentReaction();
             newCommentReaction.setUser(userRepository.findById(reactionDto.getUserId()).orElseThrow());
             newCommentReaction.setComment(commentRepository.findById(reactionDto.getCommentId()).orElseThrow());
@@ -111,10 +132,10 @@ public class CommentServiceImpl implements CommentService {
             return "Dislike is clicked";
         }
 
-        if (Objects.equals(commentReaction.getReactionStatus(),ReactionStatus.DISLIKE)){
+        if (Objects.equals(commentReaction.getReactionStatus(), ReactionStatus.DISLIKE)) {
             commentReactionRepository.delete(commentReaction);
             return "Dislike is deleted";
-        }else {
+        } else {
             commentReaction.setReactionStatus(ReactionStatus.DISLIKE);
             return "Like changed to dislike";
         }
