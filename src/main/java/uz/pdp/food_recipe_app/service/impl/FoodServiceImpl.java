@@ -6,7 +6,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uz.pdp.food_recipe_app.model.dto.request.FilterDto;
 import uz.pdp.food_recipe_app.model.dto.request.FoodAddDto;
-import uz.pdp.food_recipe_app.model.dto.response.FoodByCategoryDto;
 import uz.pdp.food_recipe_app.model.dto.response.FoodResponceDto;
 import uz.pdp.food_recipe_app.model.dto.response.NewFoodsListDto;
 import uz.pdp.food_recipe_app.model.entity.*;
@@ -34,6 +33,7 @@ public class FoodServiceImpl implements FoodService {
     public List<FoodResponceDto> getAllFoods() {
         return foodRepository.findAll().stream()
                 .map(food -> new FoodResponceDto(
+                        food.getId(),
                         food.getName(),
                         food.getRating(),
                         food.getUser().getName(),
@@ -48,6 +48,7 @@ public class FoodServiceImpl implements FoodService {
         List<Food> foods = foodRepository.findByCategoryId(categoryId);
         return foods.stream()
                 .map(food -> new FoodResponceDto(
+                        food.getId(),
                         food.getName(),
                         food.getRating(),
                         food.getUser().getName(),
@@ -148,6 +149,7 @@ public class FoodServiceImpl implements FoodService {
         return searchFoods.stream()
                 .sorted(Comparator.comparing(Food::getRating).reversed())
                 .map(food -> new FoodResponceDto(
+                        food.getId(),
                         food.getName(),
                         food.getRating(),
                         food.getUser().getName(),
@@ -183,6 +185,7 @@ public class FoodServiceImpl implements FoodService {
                 )
                 .map(food ->
                 new FoodResponceDto(
+                        food.getId(),
                         food.getName(),
                         food.getRating(),
                         food.getUser().getName(),
@@ -196,7 +199,7 @@ public class FoodServiceImpl implements FoodService {
     public List<FoodResponceDto> getFoodsByUserId(Long userId) {
         List<Food> foodList = foodRepository.findByUserId(userId);
         List<FoodResponceDto> responseDtos = foodList.stream()
-                .map(food -> new FoodResponceDto(food.getName(),  food.getRating(),food.getUser().getName(),food.getCookingTime(), food.getAttachment().getId()))
+                .map(food -> new FoodResponceDto(food.getId(),food.getName(),  food.getRating(),food.getUser().getName(),food.getCookingTime(), food.getAttachment().getId()))
                 .toList();
         return responseDtos;
     }

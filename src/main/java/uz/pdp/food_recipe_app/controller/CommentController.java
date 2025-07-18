@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uz.pdp.food_recipe_app.model.dto.request.CommentDeletingDto;
 import uz.pdp.food_recipe_app.model.dto.request.CommentRequestDto;
 import uz.pdp.food_recipe_app.model.dto.request.ReactionDto;
 import uz.pdp.food_recipe_app.model.dto.response.CommentResponseDto;
@@ -26,21 +27,27 @@ public class CommentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CommentResponseDto> addCommentToFood(@RequestBody CommentRequestDto requestDto){
+    public ResponseEntity<CommentResponseDto> addCommentToFood(@RequestBody CommentRequestDto requestDto) {
         CommentResponseDto comment = commentService.addCommentToFood(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<CommentResponseDto> updateComment(@RequestBody CommentRequestDto requestDto){
+    public ResponseEntity<CommentResponseDto> updateComment(@RequestBody CommentRequestDto requestDto) {
         CommentResponseDto updatedComment = commentService.updateComment(requestDto);
         return ResponseEntity.ok(updatedComment);
     }
 
     @PostMapping("/reaction")
-    public ResponseEntity<String> reactionProcess(@RequestBody ReactionDto reactionDto){
+    public ResponseEntity<String> reactionProcess(@RequestBody ReactionDto reactionDto) {
         String message = commentService.reactionProcess(reactionDto);
         return ResponseEntity.ok(message);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteComment(@RequestBody CommentDeletingDto requestDto) {
+        commentService.deleteComment(requestDto);
+        return ResponseEntity.ok("Comment deleted");
     }
 }
 

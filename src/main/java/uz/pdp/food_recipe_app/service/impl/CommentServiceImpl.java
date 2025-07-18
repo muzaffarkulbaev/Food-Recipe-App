@@ -3,6 +3,7 @@ package uz.pdp.food_recipe_app.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uz.pdp.food_recipe_app.model.dto.request.CommentDeletingDto;
 import uz.pdp.food_recipe_app.model.dto.request.CommentRequestDto;
 import uz.pdp.food_recipe_app.model.dto.request.ReactionDto;
 import uz.pdp.food_recipe_app.model.dto.response.CommentResponseDto;
@@ -34,7 +35,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentResponseDto> getCommentsByFoodId(Long foodId) {
         List<Comment> comments = commentRepository.findByFoodId(foodId);
-        return comments.stream().map(comment -> new CommentResponseDto(
+        return comments.stream()
+                .filter(Comment::getIsActive)
+                .map(comment -> new CommentResponseDto(
+                        comment.getId(),
                         comment.getUser().getName(),
                         comment.getText(),
                         comment.getCreatedAt(),
@@ -92,6 +96,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
 
         return new CommentResponseDto(
+                comment.getId(),
                 comment.getUser().getName(),
                 comment.getText(),
                 comment.getCreatedAt(),
@@ -100,6 +105,18 @@ public class CommentServiceImpl implements CommentService {
                 commentReactionRepository.getCommentReactionByCommentIdDislike(comment.getId())
         );
     }
+
+    public CommentDeletingDto deleteComment(CommentDeletingDto requestDto) {
+        Comment comment = commentRepository.findById(requestDto.getCommentId())
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        if (!comment.getUser().getId().equals(requestDto.getUserId())) {
+            throw new RuntimeException("You are not allowed to DELETE this comment");
+        }
+        comment.setIsActive(false);
+        commentRepository.save(comment);
+        return requestDto;
+    }
+
 
     private String reactionLike(ReactionDto reactionDto) {
         CommentReaction commentReaction = commentReactionRepository.findByCommentIdAndUserId(reactionDto.getCommentId(), reactionDto.getUserId());

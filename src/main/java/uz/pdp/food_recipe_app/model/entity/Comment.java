@@ -24,6 +24,8 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    private Boolean isActive = true;
+
 //    @OneToOne(mappedBy = "comment", cascade = CascadeType.ALL)
 //    private CommentReaction commentReaction;
 

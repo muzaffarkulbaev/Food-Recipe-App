@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Value
 public class CommentResponseDto {
+    Long id;
 
     String userName;
 
@@ -18,5 +19,4 @@ public class CommentResponseDto {
     Integer likeAmount;
 
     Integer dislikeAmount;
-
 }

@@ -1,5 +1,6 @@
 package uz.pdp.food_recipe_app.service.abstractions;
 
+import uz.pdp.food_recipe_app.model.dto.request.CommentDeletingDto;
 import uz.pdp.food_recipe_app.model.dto.request.CommentRequestDto;
 import uz.pdp.food_recipe_app.model.dto.request.ReactionDto;
 import uz.pdp.food_recipe_app.model.dto.response.CommentResponseDto;
@@ -15,4 +16,5 @@ public interface CommentService {
 
     CommentResponseDto updateComment(CommentRequestDto requestDto);
 
+    CommentDeletingDto deleteComment(CommentDeletingDto requestDto);
 }
